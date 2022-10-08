@@ -1,0 +1,83 @@
+# List the start up tasks. Learn more https://www.gitpod.io/docs/config-start-tasks/
+github:
+  prebuilds:
+    # enable for the master/default branch (defaults to true)
+    master: true
+    # enable for all branches in this repo (defaults to false)
+    branches: false
+    # enable for pull requests coming from this repo (defaults to true)
+    pullRequests: false
+    # enable for pull requests coming from forks (defaults to false)
+    pullRequestsFromForks: false
+    # add a "Review in Gitpod" button as a comment to pull requests (defaults to true)
+    addComment: false
+    # add a "Review in Gitpod" button to pull requests (defaults to false)
+    addBadge: false
+    # add a label once the prebuild is ready to pull requests (defaults to false)
+    addLabel: prebuilt-in-gitpod
+
+tasks:
+  - name: Setup Secret Box developer environment
+    init: |
+      echo "Setup Rust toolchain"
+      rustup install nightly
+      rustup target add wasm32-unknown-unknown --toolchain nightly
+      rustup default nightly
+      echo "Pull LocalSecret image"
+      docker pull ghcr.io/scrtlabs/localsecret
+      echo "Pull contract optimizer image"
+      docker pull enigmampc/secret-contract-optimizer
+      echo "Install Vue"
+      yarn global add @vue/cli
+      cd app
+      echo "Install frontend dependencies"
+      yarn install 
+      echo "Install integration test dependencies"
+      cd  ../tests
+      npm install
+      npm install -D ts-node
+      gp sync-done secretbox-env
+    command: |
+      exit
+
+  - name: Launch LocalSecret
+    init: |
+      gp sync-await secretbox-env
+    command: |
+      echo "Starting localsecret blockchain"
+      make localsecret &
+      gp ports await 26657
+      scripts/localsecret_healthcheck.sh
+      gp sync-done blockchain
+      docker container logs -f localsecret
+    openMode: split-right
+
+  - name: Secret Box Contract
+    init: |
+      gp sync-await secretbox-env
+      echo "Compile secret box contract"
+      make build
+      echo "Build schema files"
+      make schema
+      echo "Run unit tests"
+      make test
+    command: |
+      gp sync-await blockchain
+      echo "Deploy and instantiate secret contract to local blockchain"
+      gp ports await 26657
+      gp env SECRET_BOX_ADDRESS=`scripts/create_secret_box.sh`
+      gp sync-done secretbox-contract
+    openMode: split-right
+
+  - name: Secret Box Frontend
+    command: |
+      gp sync-await secretbox-contract
+      cd app
+      yarn dev
+    openMode: split-right
+
+# List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+ports:
+  - name: Secret Box App Preview
+    port: 5173
+    onOpen: open-preview
