@@ -11,10 +11,10 @@ of instantiating a secret contract, and handling queries and transactions that m
 
 ![](docs/secret-counter-app.png)
 
-The counter contract is made up of three "entry points" or where different types of messages are sent to the secret contract.
+The counter contract is made up of three "entry points," where messages (for queries and transactions) are handled.
 
 The `instantiate` entry point is complete, but the methods called to hande the `Increment`, `Reset` and `GetCount`
-methods are meant to be completed during the Secret Box [tutorial](app/tutorial/guide.md). For reference, the
+messages are meant to be completed during the Secret Box [tutorial](app/tutorial/guide.md). For reference, the
 fully-implemented contract and application code are under the `app/tutorial/solutions` directory.
 
 | Entry point  | Message(s)     | JSON                               |
