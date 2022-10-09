@@ -62,7 +62,7 @@ const initializeContract = async (
     {
       sender: client.address,
       codeId,
-      initMsg: { count: 4 }, // Initialize our counter to start from 4. This message will trigger our Init function
+      initMsg: { count: 16878 }, // Initialize our counter to start from 4. This message will trigger our Init function
       codeHash: contractCodeHash,
       label: "secret-counter-" + Math.ceil(Math.random() * 10000), // The label should be unique for every contract, add random string in order to maintain uniqueness
     },
@@ -209,7 +209,7 @@ async function resetTx(
 }
 
 // The following functions are only some examples of how to write integration tests, there are many tests that we might want to write here.
-async function test_count_on_intialization(
+async function test_intialization(
   client: SecretNetworkClient,
   contractHash: string,
   contractAddress: string
@@ -220,42 +220,35 @@ async function test_count_on_intialization(
     contractAddress
   );
   assert(
-    onInitializationCounter === 4,
-    `The counter on initialization expected to be 4 instead of ${onInitializationCounter}`
+    onInitializationCounter === 16878,
+    `The counter on initialization expected to be 16878 instead of ${onInitializationCounter}`
   );
 }
 
-async function test_increment_stress(
+async function test_increment(
   client: SecretNetworkClient,
   contractHash: string,
   contractAddress: string
 ) {
-  const onStartCounter: number = await queryCount(
+  const beforeCount: number = await queryCount(
     client,
     contractHash,
     contractAddress
   );
 
-  let stressLoad: number = 10;
-  for (let i = 0; i < stressLoad; ++i) {
-    await incrementTx(client, contractHash, contractAddress);
-  }
+  await incrementTx(client, contractHash, contractAddress);
 
-  const afterStressCounter: number = await queryCount(
+  const afterCount: number = await queryCount(
     client,
     contractHash,
     contractAddress
   );
   assert(
-    afterStressCounter - onStartCounter === stressLoad,
-    `After running stress test the counter expected to be ${
-      onStartCounter + 10
-    } instead of ${afterStressCounter}`
+    afterCount - beforeCount === 1,
+    `After counter increment, value expected to be ${
+      beforeCount + 1
+    } instead of ${afterCount}`
   );
-}
-
-async function test_gas_limits() {
-  // There is no accurate way to measue gas limits but it is actually very recommended to make sure that the gas that is used by a specific tx makes sense
 }
 
 async function runTestFunction(
@@ -278,16 +271,16 @@ async function runTestFunction(
     await initializeAndUploadContract();
 
   await runTestFunction(
-    test_count_on_intialization,
+    test_intialization,
     client,
     contractHash,
     contractAddress
   );
+
   await runTestFunction(
-    test_increment_stress,
+    test_increment,
     client,
     contractHash,
     contractAddress
   );
-  await runTestFunction(test_gas_limits, client, contractHash, contractAddress);
 })();
