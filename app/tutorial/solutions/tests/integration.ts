@@ -62,7 +62,7 @@ const initializeContract = async (
     {
       sender: client.address,
       codeId,
-      initMsg: { count: 16876 }, // Initialize our counter to start from 4. This message will trigger our Init function
+      initMsg: { count: 4 }, // Initialize our counter to start from 4. This message will trigger our Init function
       codeHash: contractCodeHash,
       label: "secret-counter-" + Math.ceil(Math.random() * 10000), // The label should be unique for every contract, add random string in order to maintain uniqueness
     },
@@ -166,6 +166,23 @@ async function incrementTx(
   contractHash: string,
   contractAddess: string
 ) {
+  const tx = await client.tx.compute.executeContract(
+    {
+      sender: client.address,
+      contractAddress: contractAddess,
+      codeHash: contractHash,
+      msg: {
+        increment: {},
+      },
+      sentFunds: [],
+    },
+    {
+      gasLimit: 200000,
+    }
+  );
+
+  //let parsedTransactionData = JSON.parse(fromUtf8(tx.data[0])); // In our case we don't really need to access transaction data
+  console.log(`Increment TX used ${tx.gasUsed} gas`);
 }
 
 async function resetTx(
@@ -173,10 +190,26 @@ async function resetTx(
   contractHash: string,
   contractAddess: string
 ) {
+  const tx = await client.tx.compute.executeContract(
+    {
+      sender: client.address,
+      contractAddress: contractAddess,
+      codeHash: contractHash,
+      msg: {
+        reser: { count: 0 },
+      },
+      sentFunds: [],
+    },
+    {
+      gasLimit: 200000,
+    }
+  );
+
+  console.log(`Reset TX used ${tx.gasUsed} gas`);
 }
 
-// The following functions are only some examples of how to write integration tests. 
-async function test_intialization(
+// The following functions are only some examples of how to write integration tests, there are many tests that we might want to write here.
+async function test_count_on_intialization(
   client: SecretNetworkClient,
   contractHash: string,
   contractAddress: string
@@ -186,14 +219,13 @@ async function test_intialization(
     contractHash,
     contractAddress
   );
-
   assert(
-    onInitializationCounter === 16876,
-    `The counter on initialization expected to be 16876 instead of ${onInitializationCounter}`
+    onInitializationCounter === 4,
+    `The counter on initialization expected to be 4 instead of ${onInitializationCounter}`
   );
 }
 
-async function test_increment(
+async function test_increment_stress(
   client: SecretNetworkClient,
   contractHash: string,
   contractAddress: string
@@ -204,31 +236,26 @@ async function test_increment(
     contractAddress
   );
 
-  await incrementTx(client, contractHash, contractAddress);
+  let stressLoad: number = 10;
+  for (let i = 0; i < stressLoad; ++i) {
+    await incrementTx(client, contractHash, contractAddress);
+  }
 
-  const afterCounter: number = await queryCount(
+  const afterStressCounter: number = await queryCount(
     client,
     contractHash,
     contractAddress
   );
-
-  assert(true);
+  assert(
+    afterStressCounter - onStartCounter === stressLoad,
+    `After running stress test the counter expected to be ${
+      onStartCounter + 10
+    } instead of ${afterStressCounter}`
+  );
 }
 
-async function test_reset(
-  client: SecretNetworkClient,
-  contractHash: string,
-  contractAddress: string
-) {
-  await resetTx(client, contractHash, contractAddress);
-
-  const count: number = await queryCount(
-    client,
-    contractHash,
-    contractAddress
-  );
-
-  assert(true);
+async function test_gas_limits() {
+  // There is no accurate way to measue gas limits but it is actually very recommended to make sure that the gas that is used by a specific tx makes sense
 }
 
 async function runTestFunction(
@@ -250,28 +277,17 @@ async function runTestFunction(
   const [client, contractHash, contractAddress] =
     await initializeAndUploadContract();
 
-  // Instantiate test
   await runTestFunction(
-    test_intialization,
+    test_count_on_intialization,
     client,
     contractHash,
     contractAddress
   );
-
-  // Increment counter test
   await runTestFunction(
-    test_increment,
+    test_increment_stress,
     client,
     contractHash,
     contractAddress
   );
-
-  // Reset counter test
-  await runTestFunction(
-    test_reset,
-    client,
-    contractHash,
-    contractAddress
-  );
-
+  await runTestFunction(test_gas_limits, client, contractHash, contractAddress);
 })();

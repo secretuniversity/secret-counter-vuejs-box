@@ -15,14 +15,14 @@ The counter contract is made up of three "entry points" or where different types
 
 The `instantiate` entry point is complete, but the methods called to hande the `Increment`, `Reset` and `GetCount`
 methods are meant to be completed during the Secret Box [tutorial](app/tutorial/guide.md). For reference, the
-fully-implemented contract and application code are under the `app/tutorial/solution` directory.
+fully-implemented contract and application code are under the `app/tutorial/solutions` directory.
 
-| Entry point  | Message(s)     | JSON                   |
-|--------------|----------------|------------------------|
-| instantiate  | InstantiateMsg | `{"count": 16876}`     |
-| execute      | Increment      | `increment {}`         |
-|              | Reset          | `reset {}`             |
-| query        | GetCount       | `get_count {}`         |
+| Entry point  | Message(s)     | JSON                               |
+|--------------|----------------|------------------------------------|
+| instantiate  | InstantiateMsg | `{ "count": 16876 }` |
+| execute      | Increment      | `increment {}`                     |
+|              | Reset          | `reset {}`                         |
+| query        | GetCount       | `get_count {}`                     |
 
 <br/>
 
@@ -139,5 +139,3 @@ To use the Swagger or OpenAPI interaces append `/swagger/` or `/openapi/` to the
 # Contributors
 - Laura SecretChainGirl [Github](https://github.com/secetchaingirl) - secret contract development
 - Alex Sinplea [Github](https://github.com/sinplea) - frontend development
-- Jeff Puttstrife - UI/UX and graphic design
-- Kate Unakatu - UI/UX and graphic design
