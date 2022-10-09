@@ -9,9 +9,9 @@ It consists of a frontend (Vue + Vite + Typescript) and a secret contract (Rust 
 This is a beginner-level box and is for developers new to secret contract development. It illustrates the basics
 of instantiating a secret contract, and handling queries and transactions that modify state data.
 
-The counter contract is made up of three "entry points" or where different types of messages are sent to the secret contract.
-
 ![](docs/secret-counter-app.png)
+
+The counter contract is made up of three "entry points" or where different types of messages are sent to the secret contract.
 
 The `instantiate` entry point is complete, but the methods called to hande the `Increment`, `Reset` and `GetCount`
 methods are meant to be completed during the Secret Box [tutorial](app/tutorial/guide.md). For reference, the
