@@ -234,7 +234,7 @@ function main() {
     log "secretcli version in the docker image is: $(secretcli version)"
 
     local init_msg
-    init_msg='{"count": 0}'
+    init_msg='{"count": 16876}'
     contract_addr="$(create_contract '.' "$init_msg")"
 
     log "contract address: $contract_addr"
