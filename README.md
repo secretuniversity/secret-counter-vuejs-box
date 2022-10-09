@@ -86,9 +86,10 @@ interact with the secret counter contract.
 
 These are great examples of interacting with the Secret Network and can be used to bootstrap frontend development.
 
-```
-npx ts-node integration.ts
-```
+| Command                       | Action                                                    |
+|:----------------------------  |:--------------------------------------------------------  |
+| `npx ts-node integration.ts`  | Runs the integration tests                                |
+
 
 ### Frontend App
 
@@ -116,7 +117,9 @@ http://localhost:1317/openapi/ to view the queries, transactions and parameters 
 
 ### Gitpod Workspace
 
-When using the Gitpod workspace, prepend the port number to the gitpod url. If the workspace is at
+When using the Gitpod workspace, prepend the port number to the Gitpod URL. 
+
+For example, if the workspace is at
 `https://secretunive-secretboxvi-zyc1kppqbvk.ws-us69.gitpod.io`, then you can connect to the LCD service at
 `https://1317-secretunive-secretboxvi-zyc1kppqbvk.ws-us69.gitpod.io`.
 
