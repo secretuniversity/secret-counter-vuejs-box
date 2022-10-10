@@ -1,166 +1,146 @@
-# Secret Box Template Tutorial 
-
-This box comes with everything you need to create your own Secret Box. In the screenshot below, you can see the Secret Box launched in a [Gitpod](https://gitpod.io/docs) workspace. 
-
-## Gitpod Workspace
-The `.gitpod.yml` (in the project root directory) has definitions for tasks and prebuild information 
-that define how the Secret Box is configured and launched.
-
-During the prebuild phase, Gitpod installs all of the project dependencies including pulling the necessary docker
-images used for `LocalSecret` and the contract optimizer (see the `Makefile`). And to make the startup process
-faster, the secret contract is compiled and unit tests are run as part of the prebuild as well.
-
-When the workspace is launched, `LocalSecret` is started, shown in the first terminal window (below). In the second terminal window, the script that uploads and instantiates the secret contract is kicked off. Finally, the frontend app is opened in a [VS Code](https://code.visualstudio.com/) browser preview window.
-
-To open the Secret Box in an external browser, open a new terminal window within the 
-workspace and enter the following Gitpod CLI command.
-```
-gp preview $(gp url 5173) --external
-```
-
-NOTE: the Vite server is configured to listen to port 5173 for requests.
-
-![](illustrations/secret-box-template.png)
-
-
-## Getting Started
-
-Aside from making your contract and app-specific changes to the template code, you'll want to update the following:
-
- 1. `Cargo.toml` - `cargo` configuration and contract dependencies
-<br/>
-
- 2. `README.md` - information including how to run it locally (you can use the `docs/` directory for any diagram or other images needed to document your Secret Box). 
-<br/>
-
- 3. `examples/schema.rs` - update with the name of your secret contract
-<br/>
-
- 4. `tests/integration.ts` - integration tests for your Secret Box
-<br/>
-
- 5. `app/tutorial/` - write your guide in `guide.md` and include any images in `illustrations/`
-<br/>
-
- 6. `app/` - make your Secret Box frontend changes here
- <br/>
-
-See the following steps for more details on the changes you'll want to make. Feel free to make any needed modifications to make this Secret Box your own :tada:.
-
-## Cargo Configuration
- - Make sure to modify the `Cargo.toml` file so it has the correct Secret Box name, author, description, etc.
-    
-    ``` 
-    [package]
-    name = "secret-box-vite-template"
-    version = "0.1.0"
-    authors = ["laura <laura@secretchaingirl.io>"]
-    edition = "2021"
-    description = "A secret box template for the simple counter contract"
-    license = "MIT" 
-    ```
- - And define the secret contract dependencies needed by your Secret Box
-    
-    ``` 
-    [dependencies]
-    cosmwasm-std = { git = "https://github.com/scrtlabs/cosmwasm", branch = "secret" }
-    cosmwasm-storage = { git = "https://github.com/scrtlabs/cosmwasm", branch = "secret"
-    schemars = "0.8.1
-    serde = { version = "1.0.114", default-features = false, features = ["derive"] }
-    thiserror = { version = "1.0" }
-    
-    # [dev-dependencies]
-    cosmwasm-schema = "1.0.0"
-    ```
-
-    
-## README.md
- - Modify the "Open in Gitpod" link so that it references your Secret Box repository name/location
-
-```
-https://gitpod.io/#https://github.com/secretuniversity/secret-blueprint-box
-```
-
-*Once deployed to our platform, we will update the link so that it references the Secret University github organization*
-
- - Update it so that it's specific to your Secret Box.
+# Secret Counter Box Tutorial 
  
-The README is meant to be used in a local developer environment. Include instructions on setting up and running your Secret Box. Consider including anything you think will help [Secret University](https://scrt.university) list your secret box, upon review and approval by the core team. Based on your judgement, you might have images and even diagrams (e.g. UML), design descriptions--basically the key things you think will be helpful for Secret Network developers in learning from and using your Secret Box.
 
-## Schema
-- Modify `examples/schema.rs` and change the secret contract name so that it matches `Cargo.toml`
+## Introduction
+This box is an introductory or beginner-level quickstart based on the [counter template contract](https://github.com/secretuniversity/secret-template-cw1).
+
+Secret Counter is a contract that illustrates how to handle a basic query and state changes (e.g. transactions) on the Secret Network. 
+
+You'll notice that on launching this Secret Box, a workspace is opened that does a few things for you initially, including setting up the development environment,
+starting the `LocalSecret` blockchain, deploying and instantiating the contract and finally, starting the application.
+
+In the next sections, we'll describe the contract design, walk you through the creation of your contract instance and then you'll modify the contract and application code to:
+
+- query the counter value
+- increment the counter
+- reset the counter
+
+
+### Further Reading
+
+After going through this tutorial, we encourage you to go through this [Getting Started Guide](https://docs.scrt.network/secret-network-documentation/development/getting-started) for further learning.
+
+If you're new to the Rust programming language, check out the [Rust Book](https://doc.rust-lang.org/book/) or the [Rustlings](https://github.com/rust-lang/rustlings) course.
+
+Secret's CosmWasm is based on vanilla CosmWasm so there are differences due to the privacy aspects, but these [docs](https://docs.cosmwasm.com/docs/1.0/) are an excellent resource on developing smart contracts in the Cosmos eocsystem.
+
+## Architecture
+
+The design for the Secret Counter contract involves the contract owner, who instantiates, and the user of the contract who can query, increment and reset the counter.
+
+![](/app/tutorial/illustrations/architecture.png)
+
+### Entry Points
+
+There are three entry points for a CosmWasm contract:
+
+- `instantiate()` - receives the `InstantiateMsg` and saves the counter to the contract state
+
+- `execute()` - the `Increment` and `Reset` messages are handled here (transactions that change state data)
+
+- `query()` - the `QueryCount` message is sent to this entry point
+
+One of the first things you'll do as a secret contract developer is to design the [messages](/src/msg.rs) handled by your contract. 
+
+### Instantiate
+
+We've defined our `InstantiateMsg` as:
+```
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, JsonSchema)]
+pub struct InstantiateMsg {
+      pub count: i32,
+}
+```
+
+That means when we create the contract, we're sending the JSON representation of the above as:
 
 ```
-use secret_box_vite_template::msg::{CountResponse, ExecuteMsg, InstantiateMsg, QueryMsg};
-use secret_box_vite_template::state::State;
+{ "count": 1}
 ```
+### Query
 
-## Integration Tests
-- After completing your secret contract and unit test code, modify the `integration.ts` as needed. These are super helpful for illustrating how to interact with a Secret App such as connecting to the network, querying and executing transactions, etc.
-
-
-## Tutorial
-This is where you'll write the guide for your Secret Box. Under the `app/tutorial/` directory you'll find a starting guide (this file :tada:) in `guide.md`.
-
--  delete `app/tutorial/illustrations/secret-box-template.png`
-<br/>
- 
-One thing to consider when writing your guide is to determine what blueprint code your Secret Box contains and 
-what will be given in the tutorial for developers to add/modify manually.
-
-In this scenario, consider creating a `solution/` or similar directory that developers can refer to while learning. 
-It's also entirely possble, and acceptable, that your code is complete and the tutorial steps walk the developer 
-through the key aspects and code snippets you decide to include!
-
-This is an excellent example of a code walkthrough that is more inline with the above approach: [Millionaire's Problem Breakdown](https://docs.scrt.network/secret-network-documentation/development/getting-started/millionaires-problem-breakdown-extra-credit).
-
-## Secret Box Frontend
-This is where all of your frontend code goes, under the `app/` directory and is setup as a [Vite](https://vitejs.dev/guide/)  project using the [Vue](https://vuejs.org/) framework and [Typescript](https://www.typescriptlang.org/) programming language.
-
-*Vite* is a fast, lean build tool that lets you work with a number of frameworks (e.g. *vue, react, svelte*) and either *Javascript* or *Typescript*.
-
-If you want to use other frameworks and languages, feel free to completely revamp the frontend code, the `README.md` and `package.json` to fit your Secret Box needs.
-
-After adding your code:
-
-1. Use `src/assets/logo.png` in your `src/App.vue`, which is the Secret Box logo, somewhere within the header of your application
-<br/>
-
-2. Add any box images needed as part of your guide to the `illustrations/` directory. For example, listing unit-test results in a tutorial step
-<br/>
-
-3. Change the name of your Secret Box app in `package.json`
-<br/>
-
-4. Change the `<title>` element in `index.html` to the name of your Secret Box
-<br/>
-
-5. Put any images referenced in your modified `index.html` in the `public/` directory
-<br/>
-
-6. Modify the SecretBox Vue element in `App.vue`
-<br/>
-
-7. Images for your Secret Box frontend go in `src/assets`
-<br/>
-
-8. Create your frontend SecretBox component in `src/components/SecretBox.vue`
-<br/>
-
-
-### UI/UX
-If you're able to create and implement your own Secret Box UI/UX that's great. Secret Boxes are meant to have beautiful, intuitive and easy to use interfaces.
-
-If you're not that kind of developer (quite common!) and don't have the UI/UX expertise to create a polished user interface,  we ask that you include a wireframe in the form of a diagram or a simple text-based description of the elements required by your box and any other notes that would be helpful for our design/implementation team to bring your box to life. Our team will work with you to create a design based on your vision for your Secret Box.
-
-We look forward to seeing what Secret Box you will create for the Secret Network developer community :tada:.
-
-
-## Notes
-
-For reference, the Gitpod deploy/instantiation of the Secret Box contract address is noted below:
+The `GetCount` message is defined as a `QueryMsg` enum:
 
 ```
-secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg
+pub enum QueryMsg {
+    // GetCount returns the current count as a json-encoded number
+    GetCount {},
+}
 ```
+
+We use `get_count {}` with no parameters to invoke the query to get the value of the counter.
+
+
+
+## Creating the Contract Instance
+
+If you've done any object-oriented programming, the idea of instantiating an object from a class definition will be familiar to you.
+
+You can think of Secret Contracts as class definitions that first need to get deployed to the blockchain. Once deployed, you create an instance by sending
+an `InstantiateMsg` to the deployed contract which results in the address of your secret contract.
+
+In the Secret Box workspace, you should see the output of the tasks that store and create your contract:
+
+```
+
+uploaded contract #1
+sending init message:
+'{"count": 16876}'
+waiting on tx: 21CA06685161CC55B6F7CA171005418E443A8696CA8879EDE18168A0C2E00446
+contract address: secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg
+Secret Box created successfully
+```
+
+
+When stored on `LocalSecret`, the result is an ID that uniquely identifies the uploaded contract. Because it's a fresh workspace, the contract ID is assigned a value of `1`
+in the above message:
+
+```
+uploaded contract #1
+```
+
+After it's been uploaded, it is instantiated by sending the `InstantiateMsg`:
+
+```
+'{"count": 16876}'
+```
+
+And the output of the instantiation includes the contract address, which is stored in the environment variable `SECRET_BOX_ADDRESS`:
+
+```
+contract address: secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg
+```
+
+We'll cover the exact steps to upload and instantiate your contract as part of your next steps to evolve the Secret Counter application, fleshing out
+the details for the query, increment and reset functions.
+
+Here's a breakdown of what the `instantiate()` method in your contract does:
+
+```
+#[entry_point]
+pub fn instantiate(
+    deps: DepsMut,
+    _env: Env,
+    info: MessageInfo,
+    msg: InstantiateMsg,
+) -> Result<Response, StdError> {
+
+    // create initial state with count and contract owner
+    let state = State {
+        count: msg.count,
+        owner: info.sender.clone(),
+    };
+
+    // save the contract state
+    config(deps.storage).save(&state)?;
+
+    deps.api.debug(&format!("Contract was initialized by {}", info.sender));
+
+    Ok(Response::default())
+}
+```
+
+## Querying the Secret Counter Contract
+
+To implement the `query_count` functionality, open the `src/contract.rs` file and find the `query()` method:
 
