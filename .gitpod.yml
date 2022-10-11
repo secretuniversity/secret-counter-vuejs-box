@@ -63,6 +63,9 @@ tasks:
       make test
     command: |
       gp sync-await blockchain
+      rustup install nightly
+      rustup target add wasm32-unknown-unknown --toolchain nightly
+      rustup default nightly
       echo "Deploy and instantiate secret contract to local blockchain"
       gp ports await 26657
       gp env SECRET_BOX_ADDRESS=`scripts/create_secret_box.sh`
