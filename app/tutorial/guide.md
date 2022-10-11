@@ -59,7 +59,7 @@ That means when we create the contract, we're sending the JSON representation of
 ```
 #### Query
 
-The `GetCount` message is defined as a `QueryMsg` enum:
+The `GetCount` message is defined as a `QueryMsg` enum variant:
 
 ```
 pub enum QueryMsg {
@@ -164,13 +164,13 @@ of the transaction this `InstantiateMsg` was executed in, and `ContractInfo` whi
 
 - `msg` - `InstantiateMsg` this is the message defined for the creation of the contract, which in our case is an 32-bit integer named `count`.
 
-### Instantiate Logic
+### Save the State
 The first thing this method does is to declare and set the values for the `State` object, which is defined in [state.rs](/src/state.rs).
 
 You can see that the pieces of data we're storing in `State` are the initial
 counter value (`msg.count`) and the contract owner `info.sender.clone()`. 
 
-If you're not familiar with Rust's `borrow`, check out this [guide](https://doc.rust-lang.org/rust-by-example/scope/borrow.html), which will explain why we've had to set the `owner` to a `clone()` of the sender's address.
+If you're not familiar with Rust's `borrowing and referencing`, check out this [guide](https://doc.rust-lang.org/rust-by-example/scope/borrow.html), which will explain why we've had to set the `owner` to a `clone()` or copy of the sender's address.
 
 ```
     // create initial state with count and contract owner
@@ -192,7 +192,352 @@ the node logs and then return the `Ok` enum with a default response.
     Ok(Response::default())
 ```
 
-## Querying the Secret Counter Contract
+And in the `LocalSecret` terminal, we can see that the output from the debug message:
 
-To implement the `query_count` functionality, open the `src/contract.rs` file and find the `query()` method:
+![](/app/tutorial/illustrations/instantiate.png)
+
+## Querying the Counter Value
+
+To implement the `query_count` functionality, open the [contract.rs](/src/contract.rs) file and find the `query()` method:
+
+```
+#[entry_point]
+pub fn query(
+    deps: Deps,
+    _env: Env,
+    msg: QueryMsg,
+) -> StdResult<Binary> {
+    match msg {
+        QueryMsg::GetCount {} => to_binary(&query_count(deps)?),
+    }
+}
+```
+
+The `query` entry point is where all query messages are sent to your contract. Here is where you'll do a `match` on the message variant and call the appropriate query method in your contract.
+
+Notice that we are returning query results as a `Binary` type:
+
+```
+StdResult<Binary>
+```
+
+by calling the `to_binary` method, passing a reference to the `query_count` response:
+
+```
+to_binary(&query_count(deps)?)
+```
+
+We apply the `?` panic operator so that if the query returns an error, it's handled properly.
+
+Next, we need to implement the `query_count()` method so that it returns a response with the current counter value.
+
+```
+fn query_count(
+    deps: Deps,
+) -> StdResult<CountResponse> {
+
+    // 1. load state
+    // 2. return count response
+
+    Ok(CountResponse { count: 16876 })
+}
+```
+
+The first thing we need to do is load the contract state. 
+
+```
+   // 1. load state
+   let state = config_read(deps.storage).load()?;
+```
+
+The counter contract uses a Singleton type for storage of the `State` data, with the `config_read()` and `config()` methods operating on that, reading and saving the contract state.
+
+Next, we'll create the response and return it's value. 
+
+Substitute this:
+
+```
+    // 2. return count response
+
+    Ok(CountResponse { count: 16876 })
+```
+
+with:
+
+```
+   // 2. return count response
+   Ok(CountResponse { count: state.count })
+```
+
+Finally, use a terminal window to compile your contract changes:
+
+```
+make build
+```
+
+If successful, you'll see this output:
+
+```
+    Finished release [optimized] target(s) in 0.02s
+cp ./target/wasm32-unknown-unknown/release/*.wasm ./contract.wasm
+cat ./contract.wasm | gzip -9 > ./contract.wasm.gz
+```
+
+#### Initialization and Query Unit Test
+
+If you scroll down to the end of the contract code, you'll see the area where we code our unit tests. We've already
+implemented the `proper_initialization` unit test that includes a call to `query()`, passing the `QueryMsg::GetCount` 
+message.
+
+```
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    use cosmwasm_std::testing::{mock_dependencies, mock_env, mock_info};
+    use cosmwasm_std::{coins, from_binary};
+
+    #[test]
+    fn proper_initialization() {
+        let mut deps = mock_dependencies();
+
+        let msg = InstantiateMsg { count: 16876 };
+        let info = mock_info("creator", &coins(1000, "earth"));
+
+        // we can just call .unwrap() to assert this was a success
+        let res = instantiate(deps.as_mut(), mock_env(), info, msg).unwrap();
+        assert_eq!(0, res.messages.len());
+
+        // it worked, let's query the state
+        let res = query(deps.as_ref(), mock_env(), QueryMsg::GetCount {}).unwrap();
+        let value: CountResponse = from_binary(&res).unwrap();
+        assert_eq!(16876, value.count);
+    }
+}
+```
+
+Now, that we've modified the contract to return the actual value of the counter, we can change our initialization unit
+test so that it uses a different value from the hard-coded `16876`.
+
+Change the `InstantiateMsg` from:
+
+```
+let msg = InstantiateMsg { count: 16876 };
+```
+
+to:
+
+```
+let msg = InstantiateMsg { count: 1000 };
+```
+
+And change assertion statement from:
+
+```
+assert_eq!(1000, value.count);
+```
+
+Finally, run your unit tests:
+
+```
+make test
+```
+
+If successful, the unit test output will look like this:
+
+```
+    Finished test [unoptimized + debuginfo] target(s) in 13.05s
+     Running unittests src/lib.rs (target/debug/deps/secret_counter_vuejs_box-23b8b0115ff1a222)
+
+running 3 tests
+test contract::tests::increment ... ok
+test contract::tests::reset ... ok
+test contract::tests::proper_initialization ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+```
+
+## Handle Execute Messages
+
+Now, we'll work on the messages that come in to the `execute()` entry point of our contract: 
+
+- Increment - add 1 to the counter
+- Reset - set the value of the counter
+
+You'll notice we've already completed the `match` statement for two `ExecuteMsg` variants:
+
+```
+#[entry_point]
+pub fn execute(
+    deps: DepsMut,
+    _env: Env,
+    info: MessageInfo,
+    msg: ExecuteMsg,
+) -> Result<Response, ContractError> {
+    match msg {
+        ExecuteMsg::Increment {} => try_increment(deps),
+        ExecuteMsg::Reset { count } => try_reset(deps, info, count),
+    }
+}
+```
+
+### Increment the Counter
+
+Find the `try_increment` function and change it from this:
+
+```
+pub fn try_increment(
+    deps: DepsMut,
+) -> Result<Response, ContractError> {
+
+    // 1. load state
+    // 2. increment the counter by 1
+    // 3. save state
+
+    deps.api.debug("count incremented successfully");
+    Ok(Response::default())
+}
+```
+
+to:
+
+```
+pub fn try_increment(
+    deps: DepsMut,
+) -> Result<Response, ContractError> {
+
+   // Update state, incrementing counter by 1
+    config(deps.storage).update(|mut state| -> Result<_, ContractError> {
+        state.count += 1;
+        Ok(state)
+    })?;
+
+    deps.api.debug("count incremented successfully");
+    Ok(Response::default())
+}
+```
+
+Notice that we're able to load and update the state in one statement above. For more information on working with 
+storage, check out the [Secret CosmWasm storage docs](https://docs.scrt.network/secret-network-documentation/development/secret-contracts/contract-components/storage).
+
+
+### Reset the Counter
+
+Find the `try_reset` function and change it from this:
+
+```
+pub fn try_reset(
+    deps: DepsMut,
+    info: MessageInfo,
+    count: i32,
+) -> Result<Response, ContractError> {
+
+    // 1. load state
+    // 2. if sender is not the contract owner, return error
+    // 3. else, reset the counter to the value given
+
+    deps.api.debug("count reset successfully");
+    Ok(Response::default())
+}
+```
+
+to:
+
+```
+pub fn try_reset(
+    deps: DepsMut,
+    info: MessageInfo,
+    count: i32,
+) -> Result<Response, ContractError> {
+
+   // Update state, setting counter to value
+    config(deps.storage).update(|mut state| -> Result<_, ContractError> {
+        if info.sender != state.owner {
+            return Err(ContractError::Unauthorized {});
+        }
+        state.count = count;
+        Ok(state)
+    })?;
+
+    deps.api.debug("count reset successfully");
+    Ok(Response::default())
+}
+```
+
+Within the `update` portion, we're checking to make sure that the sender of the message is also the contract
+owner because the `reset` message is more of an admin function. 
+
+We return a `ContractError` enum variant stating the function is unauthorized, if the sender is not the owner. The
+[error.rs](/src/error.rs) is where you'll put all of your contract-specific errors for the `execute` messages.
+
+#### Increment and Reset Unit Tests
+
+Yay, now we're ready to add unit tests for the `ExecuteMsg::Increment` and `ExecuteMsg::reset` message variants.
+
+Change the increment and reset unit test functions from:
+
+```
+    #[test]
+    fn increment() {
+        assert!(true);
+    }
+
+   #[test]
+    fn reset() {
+        assert!(true);
+    }
+```
+
+to:
+
+```
+#[test]
+    fn increment() {
+        let mut deps = mock_dependencies();
+
+        let msg = InstantiateMsg { count: 17 };
+        let info = mock_info("creator", &coins(2, "token"));
+        let _res = instantiate(deps.as_mut(), mock_env(), info, msg).unwrap();
+
+        // anyone can increment
+        let info = mock_info("anyone", &coins(2, "token"));
+        let msg = ExecuteMsg::Increment {};
+        let _res = execute(deps.as_mut(), mock_env(), info, msg).unwrap();
+
+        // should increase counter by 1
+        let res = query(deps.as_ref(), mock_env(), QueryMsg::GetCount {}).unwrap();
+        let value: CountResponse = from_binary(&res).unwrap();
+        assert_eq!(18, value.count);
+    }
+
+    #[test]
+    fn reset() {
+        let mut deps = mock_dependencies();
+
+        let msg = InstantiateMsg { count: 17 };
+        let info = mock_info("creator", &coins(2, "token"));
+        let _res = instantiate(deps.as_mut(), mock_env(), info, msg).unwrap();
+
+        // not anyone can reset
+        let unauth_env = mock_info("anyone", &coins(2, "token"));
+        let msg = ExecuteMsg::Reset { count: 5 };
+        let res = execute(deps.as_mut(), mock_env(), unauth_env, msg);
+        match res {
+            Err(ContractError::Unauthorized {}) => {}
+            _ => panic!("Must return unauthorized error"),
+        }
+
+        // only the original creator can reset the counter
+        let auth_info = mock_info("creator", &coins(2, "token"));
+        let msg = ExecuteMsg::Reset { count: 5 };
+        let _res = execute(deps.as_mut(), mock_env(), auth_info, msg).unwrap();
+
+        // should now be 5
+        let res = query(deps.as_ref(), mock_env(), QueryMsg::GetCount {}).unwrap();
+        let value: CountResponse = from_binary(&res).unwrap();
+        assert_eq!(5, value.count);
+    }
+```
+
+Now, let's run the unit tests and if successful, we'll see the initialization, increment and reset tests pass :tada:.
 
