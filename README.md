@@ -139,3 +139,5 @@ To use the Swagger or OpenAPI interaces append `/swagger/` or `/openapi/` to the
 # Contributors
 - Laura SecretChainGirl [Github](https://github.com/secetchaingirl) - secret contract development
 - Alex Sinplea [Github](https://github.com/sinplea) - frontend development
+- Jeff Puttstrife - Lead UI/UX design
+- Kate Unakatu [Telegram](https://t.me/unakatu) - UI/UX design and graphics (Loreum Ipsem and Geek.pics founding team member)

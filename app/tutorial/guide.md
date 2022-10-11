@@ -528,7 +528,7 @@ to:
     }
 ```
 
-Now, let's run the unit tests and if successful, we'll see the initialization, increment and reset tests pass :tada:.
+Now, let's run the unit tests (`make test`) and if successful, we'll see the initialization, increment and reset tests pass :tada:.
 
 ```
     Finished test [unoptimized + debuginfo] target(s) in 13.05s
@@ -541,4 +541,65 @@ test contract::tests::proper_initialization ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 ```
+
+## Run the Integration Tests
+
+Now that you've got all of your contract's functionality implemented and the unit tests are passing, it's time to
+run the integration tests. These are written using [TypeScript](https://www.typescriptlang.org/) and [Secret.js](https://secretjs.scrt.network/), which is the library that you'll use to 
+connect to `LocalSecret` and run your queries and transactions.
+
+In the terminal window, go to the `tests/` directory and run:
+
+```
+npx ts-node integration.ts
+```
+
+As the test is running you'll start to see additional activity in the node log, as the integration test:
+
+- initializes the *Secret.js* client
+- gets SCRT tokens from the `LocalSecret` *faucet*
+- stores and instantiates the counter contract
+- runs the increment and reset test functions
+
+![](/app/tutorial/illustrations/integration-tests-node-log.png)
+
+Notice that we see a different contract code ID in the output of the integration tests:
+
+```
+Initialized client with wallet address: secret1dud2vm28nlc06m958xdgutnl8tymq3fknc95h7
+got tokens from faucet: 1000000000
+Uploading contract
+Contract codeId:  2
+Contract hash: f96703308bf8756315fa867d0fa771b3405b030332832c73c5cd51caf3dc7c2b
+Contract address: secret10pyejy66429refv3g35g2t7am0was7ya6hvrzf
+Testing test_intialization
+[SUCCESS] test_intialization
+Testing test_increment
+[SUCCESS] test_increment
+Testing test_reset
+[SUCCESS] test_reset
+```
+
+The `contract codeId` is `2` because we already uploaded a version of the contract in the beginning of the workspace.
+Each time you store your revised contract on Secret Network, it gets a new identifier.
+
+We also have a new contract address and hash as part of the instantiation of our revised contract.
+
+```
+Contract hash: f96703308bf8756315fa867d0fa771b3405b030332832c73c5cd51caf3dc7c2b
+Contract address: secret10pyejy66429refv3g35g2t7am0was7ya6hvrzf
+```
+
+Congratulations, you've successfully completed the secret contract! :rocket:
+
+In the next part of this tutorial, we'll modify the Secret Counter app code so that we can actually try out
+the increment and reset functions. 
+
+## Revise the Secret Counter Frontend
+
+Now, we'll modify the [SecretBox.vue](/app/src/components/SecretBox.vue) component and have it use the hash and address of our revised contract.
+
+TBD
+
+
 
