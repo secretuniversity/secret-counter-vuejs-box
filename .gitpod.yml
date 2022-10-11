@@ -19,10 +19,6 @@ github:
 tasks:
   - name: Setup Secret Box developer environment
     init: |
-      echo "Setup Rust toolchain"
-      rustup install nightly
-      rustup target add wasm32-unknown-unknown --toolchain nightly
-      rustup default nightly
       echo "Pull LocalSecret image"
       docker pull ghcr.io/scrtlabs/localsecret
       echo "Pull contract optimizer image"
@@ -55,6 +51,10 @@ tasks:
   - name: Secret Box Contract
     init: |
       gp sync-await secretbox-env
+      echo "Setup Rust toolchain"
+      rustup install nightly
+      rustup target add wasm32-unknown-unknown --toolchain nightly
+      rustup default nightly
       echo "Compile secret box contract"
       make build
       echo "Build schema files"

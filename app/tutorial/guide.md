@@ -243,28 +243,16 @@ fn query_count(
 }
 ```
 
-The first thing we need to do is load the contract state. 
+The first thing we need to do is load the contract state. The counter contract uses a Singleton type for storage of the `State` data, with the `config_read()` and `config()` methods operating on that, reading and saving the contract state. Then we create the response and return it's value. 
+
+Substitute the code in `query_count()` for this:
 
 ```
    // 1. load state
    let state = config_read(deps.storage).load()?;
-```
 
-The counter contract uses a Singleton type for storage of the `State` data, with the `config_read()` and `config()` methods operating on that, reading and saving the contract state.
+   deps.api.debug("count incremented successfully");
 
-Next, we'll create the response and return it's value. 
-
-Substitute this:
-
-```
-    // 2. return count response
-
-    Ok(CountResponse { count: 16876 })
-```
-
-with:
-
-```
    // 2. return count response
    Ok(CountResponse { count: state.count })
 ```
@@ -465,14 +453,15 @@ pub fn try_reset(
 ```
 
 Within the `update` portion, we're checking to make sure that the sender of the message is also the contract
-owner because the `reset` message is more of an admin function. 
+owner because in our design we've decided that the `reset` transaction is something only the contract owner
+should be able send. 
 
 We return a `ContractError` enum variant stating the function is unauthorized, if the sender is not the owner. The
-[error.rs](/src/error.rs) is where you'll put all of your contract-specific errors for the `execute` messages.
+[error.rs](/src/error.rs) file is where you'll put all of your contract-specific errors for the `execute` messages.
 
 #### Increment and Reset Unit Tests
 
-Yay, now we're ready to add unit tests for the `ExecuteMsg::Increment` and `ExecuteMsg::reset` message variants.
+Yay! Now we're ready to add unit tests for the `ExecuteMsg::Increment` and `ExecuteMsg::reset` message variants.
 
 Change the increment and reset unit test functions from:
 
@@ -540,4 +529,16 @@ to:
 ```
 
 Now, let's run the unit tests and if successful, we'll see the initialization, increment and reset tests pass :tada:.
+
+```
+    Finished test [unoptimized + debuginfo] target(s) in 13.05s
+     Running unittests src/lib.rs (target/debug/deps/secret_counter_vuejs_box-23b8b0115ff1a222)
+
+running 3 tests
+test contract::tests::increment ... ok
+test contract::tests::reset ... ok
+test contract::tests::proper_initialization ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+```
 
