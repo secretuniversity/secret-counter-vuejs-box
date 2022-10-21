@@ -223,7 +223,7 @@ function create_secret_box() {
     fi
 
     init_msg='{"count":0}'
-    RECEIVER_ADDRESS="$(create_contract '.' "$init_msg")"
+    SECRET_BOX_ADDRESS="$(create_contract '.' "$init_msg")"
 
     log "uploaded Secret Box contract to $SECRET_BOX_ADDRESS"
     echo "$SECRET_BOX_ADDRESS"

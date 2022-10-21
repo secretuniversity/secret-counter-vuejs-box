@@ -6,9 +6,9 @@ This box is an introductory or beginner-level quickstart based on the [counter t
 Secret Counter is a smart contract that illustrates how to handle basic query and state changes (e.g. transactions) on the Secret Network. 
 
 You'll notice that when launching this Secret Box on Gitpod, a workspace is opened that immediately takes care of a few things for you; including: 
-* setting up a online development environment for you to start coding
+* setting up an online development environment for you to start coding
 * starting a `LocalSecret` blockchain instance, 
-* creating and deploying your smart contract to `LocalSecret` 
+* creating and deploying your smart contract to `LocalSecret`
 * and finally, starting the the VueJS web application.
 
 In the next sections, we'll take a look at the overall architecture and design of our smart contract, go through the creation of your contract, and then you'll get the chance to modify your contract and application code to:
@@ -97,7 +97,7 @@ reset { "count": 66 } # Or any i32 value
 If you've done any object-oriented programming, the idea of instantiating an object from a class definition will be familiar to you.
 
 You can think of Secret Contracts as class definitions that first need to get deployed to the blockchain. Once deployed, you can create an instance of your contract by sending
-an `InstantiateMsg` to your deployed contract.
+an `InstantiateMsg` using the identifier of your deployed contract.
 
 In the Secret Box workspace, you should see the output of the tasks that store and create your contract:
 
