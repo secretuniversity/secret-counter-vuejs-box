@@ -23,3 +23,4 @@ const counter = await secretjs.query.compute.queryContract({
 });
 
 console.log(`Counter value = ${counter}`);
+

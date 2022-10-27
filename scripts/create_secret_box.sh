@@ -29,7 +29,7 @@ function secretcli() {
 
 # Just like `echo`, but prints to stderr
 function log() {
-    echo "$@" >&2
+    echo -e "$@" >&2
 }
 
 # suppress all output to stdout for the command described in the arguments
@@ -69,14 +69,12 @@ function label_by_id() {
 # The tx information will be returned.
 function wait_for_tx() {
     local tx_hash="$1"
-    local message="$2"
 
     local result
 
     log "waiting on tx: $tx_hash"
     # secretcli will only print to stdout when it succeeds
     until result="$(secretcli query tx "$tx_hash" 2>/dev/null)"; do
-        log "$message"
         sleep 1
     done
 
@@ -153,7 +151,7 @@ function compute_query() {
     secretcli query compute query "$@"
 }
 
-function upload_code() {
+function upload_contract() {
     set -e
     local directory="$1"
     local tx_hash
@@ -165,17 +163,27 @@ function upload_code() {
             jq -r '.logs[0].events[0].attributes[] | select(.key == "code_id") | .value'
     )"
 
-    log "uploaded contract #$code_id"
+    log "uploaded contract"
 
     echo "$code_id"
 }
+
+function query_contract_hash() {
+    set -e
+    local code_id="$1"
+
+    code_hash="$(secretcli query compute contract-hash-by-id "$code_id")" || return
+    log "got contract hash"
+    echo "$code_hash"
+}
+    
 
 function instantiate() {
     set -e
     local code_id="$1"
     local init_msg="$2"
 
-    log 'sending init message:'
+    log 'sending init message: \c'
     log "${init_msg@Q}"
 
     local tx_hash
@@ -186,11 +194,8 @@ function instantiate() {
 # This function uploads and instantiates a contract, and returns the new contract's address
 function create_contract() {
     set -e
-    local dir="$1"
-    local init_msg="$2"
-
-    local code_id
-    code_id="$(upload_code "$dir")"
+    local init_msg="$1"
+    local code_id="$2"
 
     local init_result
     init_result="$(instantiate "$code_id" "$init_msg")"
@@ -210,38 +215,36 @@ function unix_time_of_tx() {
     date -d "$(jq -r '.timestamp' <<<"$tx")" '+%s'
 }
 
-SECRET_BOX_ADDRESS=''
-
-function create_secret_box() {
-    set -e
-    local init_msg
-
-    if [[ "$SECRET_BOX_ADDRESS" != '' ]]; then
-        log 'Secret Box contract already exists'
-        echo "$SECRET_BOX_ADDRESS"
-        return 0
-    fi
-
-    init_msg='{"count":0}'
-    SECRET_BOX_ADDRESS="$(create_contract '.' "$init_msg")"
-
-    log "uploaded Secret Box contract to $SECRET_BOX_ADDRESS"
-    echo "$SECRET_BOX_ADDRESS"
-}
+SECRET_BOX_CODE_ID==''
+SECRET_BOX_ADDRESS==''
+SECRET_BOX_CODE_HASH=''
 
 function main() {
     log '              <####> Create Secret Box contract <####>'
-    log "secretcli version in the docker image is: $(secretcli version)"
+    log "secretcli version in the docker image is: $(secretcli version)\n"
 
     local init_msg
     init_msg='{"count": 16876}'
-    contract_addr="$(create_contract '.' "$init_msg")"
+    code_id="$(upload_contract '.')"
+    contract_hash="$(query_contract_hash "$code_id")"
+    contract_addr="$(create_contract "$init_msg" "$code_id")"
 
-    log "contract address: $contract_addr"
-    log 'Secret Box created successfully'
+    log 'Secret Box created successfully!\n'
 
+    SECRET_BOX_CODE="$code_id"
+    SECRET_BOX_ADDRESS="$contract_addr"
+    SECRET_BOX_CODE_HASH="$contract_hash"
+
+    log 'Storing environment variables:'
+    echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash" | tee .env
+    log "\n==="
+    log "=== Use 'source .env' to set the SECRET BOX environment variables in your local bash shell ==="
+    log "===\n"
+
+    log 'Returning environment variables for Gitpod worksapce'
     # If everything else worked, return successful status
-    echo $contract_addr
+    # Return env variables for Gitpod workspace
+    echo "SECRET_BOX_CODE=$code_id SECRET_BOX_ADDRESS=$contract_addr SECRET_BOX_CODE_HASH=$contract_hash"
     return 0
 }
 

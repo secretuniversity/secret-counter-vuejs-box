@@ -4,7 +4,7 @@
             <div class="w-4 h-4 rounded-full border-4 mr-2 border-[#989898]"></div>
             <a
                 :href="`#${slugify(section)}`"
-                class="block w-full font-normal text-lg hover:text-[#647FFF] cursor-pointer"
+                class="block w-full font-normal text-sm hover:text-[#647FFF] cursor-pointer"
             >
                 {{ section }}
             </a>
