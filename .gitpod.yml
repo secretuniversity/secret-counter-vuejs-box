@@ -68,7 +68,8 @@ tasks:
       rustup default nightly
       echo "Deploy and instantiate secret contract to local blockchain"
       gp ports await 26657
-      gp env SECRET_BOX_ADDRESS=`scripts/create_secret_box.sh`
+      SECRET_ENV=`scripts/create_secret_box.sh`
+      #for e in $SECRET_ENV; do gp env $e; done
       gp sync-done secretbox-contract
     openMode: split-right
 

@@ -21,3 +21,6 @@ contract.wasm*
 
 # Integration tests
 tests/node_modules/*
+
+# Local environment variables
+.env
