@@ -229,22 +229,26 @@ function main() {
     contract_hash="$(query_contract_hash "$code_id")"
     contract_addr="$(create_contract "$init_msg" "$code_id")"
 
-    log 'Secret Box created successfully!\n'
+    log '\nSecret Box created successfully!\n'
 
     SECRET_BOX_CODE="$code_id"
     SECRET_BOX_ADDRESS="$contract_addr"
-    SECRET_BOX_CODE_HASH="$contract_hash"
+    SECRET_BOX_HASH="$contract_hash"
+
+    echo "secret counter code id: $code_id"
+    echo "secret counter contract address: $contract_addr"
+    echo -e "secret counter contract code hash: $contract_hash\n"
 
     log 'Storing environment variables:'
-    echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash" | tee .env
+    echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash" > .env
     log "\n==="
-    log "=== Use 'source .env' to set the SECRET BOX environment variables in your local bash shell ==="
+    log "=== Use 'source .env' to set the SECRET BOX environment variables in your local bash shell"
     log "===\n"
 
     log 'Returning environment variables for Gitpod worksapce'
     # If everything else worked, return successful status
     # Return env variables for Gitpod workspace
-    echo "SECRET_BOX_CODE=$code_id SECRET_BOX_ADDRESS=$contract_addr SECRET_BOX_CODE_HASH=$contract_hash"
+    echo "SECRET_BOX_CODE=$code_id SECRET_BOX_ADDRESS=$contract_addr SECRET_BOX_HASH=$contract_hash"
     return 0
 }
 
