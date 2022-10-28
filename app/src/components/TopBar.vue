@@ -47,7 +47,7 @@ function toggleTheme() {
 </script>
 
 <template>
-    <div class="h-20 mb-20 grid grid-cols-3 border-b border-[#C5C5C5]">
+    <div class="h-20 mb-20 grid grid-cols-3 border-b border-[#C5C5C5] bg-white dark:bg-primary-dark">
         <div class="flex h-full items-center space-x-8 pl-28">
             <img v-if="theme === 'light'" class="cursor-pointer" src="../assets/burger_menu.svg" alt="Collapse the table of contents">
             <img v-if="theme === 'dark'" class="cursor-pointer" src="../assets/burger_menu_white.svg" alt="Collapse the table of contents">

@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { Wallet, SecretNetworkClient, fromUtf8 } from "secretjs";
+import { onMounted, ref } from 'vue'
+// import { Wallet, SecretNetworkClient, fromUtf8 } from "secretjs";
 
+const count = ref(16876)
 const show = ref(true)
-const wallet = new Wallet(
-  "grant rice replace explain federal release fix clever romance raise often wild taxi quarter soccer fiber love must tape steak together observe swap guitar"
-)
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+})
+
+// const wallet = new Wallet(
+//   "grant rice replace explain federal release fix clever romance raise often wild taxi quarter soccer fiber love must tape steak together observe swap guitar"
+// )
 
 /*
 // To create a signer secret.js client, also pass in the wallet
@@ -17,8 +23,6 @@ const secretjs = await SecretNetworkClient.create({
 })
 console.log(`Initialized client with wallet address: ${wallet.address}`);
 */
-
-const count = ref(16876)
 
 const incrementCounter = () => {
   count.value++
@@ -38,6 +42,12 @@ function isLight() {
 
 function isDark() {
   return localStorage.getItem('theme') === 'dark'
+}
+
+function handleScroll() {
+  if (show) {
+    show.value = false
+  }
 }
 
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-col w-full pl-16 pt-12">
+    <div class="flex-col w-full pl-16 pt-12 sticky top-0 overflow-y-scroll">
         <div class="flex items-center mb-6" v-for="section in sections" :key="section">
             <div class="w-4 h-4 rounded-full border-4 mr-2 border-[#989898]"></div>
             <a
