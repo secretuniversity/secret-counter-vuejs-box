@@ -245,7 +245,7 @@ function main() {
     log "=== Use 'source .env' to set the SECRET BOX environment variables in your local bash shell"
     log "===\n"
 
-    log 'Returning environment variables for Gitpod worksapce'
+    log 'Returning environment variables for Gitpod workspace'
     # If everything else worked, return successful status
     # Return env variables for Gitpod workspace
     echo "SECRET_BOX_CODE=$code_id SECRET_BOX_ADDRESS=$contract_addr SECRET_BOX_HASH=$contract_hash"
