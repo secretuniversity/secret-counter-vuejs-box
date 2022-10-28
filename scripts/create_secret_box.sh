@@ -235,9 +235,9 @@ function main() {
     SECRET_BOX_ADDRESS="$contract_addr"
     SECRET_BOX_HASH="$contract_hash"
 
-    echo "secret counter code id: $code_id"
-    echo "secret counter contract address: $contract_addr"
-    echo -e "secret counter contract code hash: $contract_hash\n"
+    log "secret counter code id: $code_id"
+    log "secret counter contract address: $contract_addr"
+    log -e "secret counter contract code hash: $contract_hash\n"
 
     log 'Storing environment variables:'
     echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash" > .env
