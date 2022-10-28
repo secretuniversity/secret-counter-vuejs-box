@@ -92,4 +92,8 @@ defineComponent({
 #guide blockquote > p {
   @apply mb-0
 }
+
+#guide a {
+  @apply text-[#647FFF] hover:text-[#647FFF] dark:hover:text-[#647FFF] dark:text-[#647FFF] cursor-pointer
+}
 </style>

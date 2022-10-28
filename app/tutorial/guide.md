@@ -24,7 +24,7 @@ The design of our Secret Counter smart contract accounts for two possible users:
 1) The contract owner (you) who instantiates the contract 
 2) The general user of our contract who can query, increment, and reset the counter.
 
-![](/app/tutorial/illustrations/architecture.png)
+![](https://i.imgur.com/z3R428U.png)
 
 ### Understanding Basic CosmWasm
 
@@ -36,7 +36,7 @@ A CosmWasm contract contains **3 entry points** we are able to interact with:
 
 - `query()` - handles messages which do **not** change the state of our contract. To recieve our counter's state we will utilize our `QueryCount` message.
 
-A good place to start when developing secret smart contracts is to design the [messages](/src/msg.rs) which will be handle handled by your contract's entry points. These messages are coded as Rust structs.
+A good place to start when developing secret smart contracts is to design the [messages](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/src/msg.rs) which will be handle handled by your contract's entry points. These messages are coded as Rust structs.
 
 #### Instantiate
 
@@ -49,7 +49,7 @@ pub struct InstantiateMsg {
 }
 ```
 
-That means that when we create our contract, we can initialize it with the following JSON represantation of the above message:
+That means that when we create our contract, we can initialize it with the following JSON representation of the above message:
 
 ```
 { "count": Some i32 Number }
@@ -86,7 +86,7 @@ You can see that the `Increment` message has no parameters. This is because the 
 increment {} # No parameters
 ```
 
-The `Reset` message takes a *count* parameter, allowing us to set the count to any number we provide as a paramter. `Reset` is sent to the `execute()` entry point as:
+The `Reset` message takes a *count* parameter, allowing us to set the count to any number we provide as a parameter. `Reset` is sent to the `execute()` entry point as:
 
 ```sh
 reset { "count": 66 } # Or any i32 value
@@ -161,7 +161,7 @@ of the transaction this `InstantiateMsg` was executed in, and `ContractInfo` whi
 - `msg` - `InstantiateMsg` this is the message defined for the creation of the contract, which in our case is an 32-bit integer named `count`.
 
 ### Saving State
-The first thing our `instantiate()` method does is declare and set the values for our `State` object, which is defined in [state.rs](/src/state.rs).
+The first thing our `instantiate()` method does is declare and set the values for our `State` object, which is defined in [state.rs](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/src/state.rs).
 
 You can see that the pieces of data we're storing in `State` are the initial
 counter value (`msg.count`) and the contract owner `info.sender.clone()`. 
@@ -194,11 +194,11 @@ the node logs, and then return the `Ok` enum with a default response.
 
 And in the `LocalSecret` terminal, we can see that the output from the debug message:
 
-![](/app/tutorial/illustrations/instantiate.png)
+![](https://i.imgur.com/W7rnLVd.png)
 
 ## Querying Our Counter's Value
 
-In order to get the value of our counter from our smart contract, we must implement the `query_count` function. Begin by opening the [contract.rs](/src/contract.rs) file and find the `query()` method:
+In order to get the value of our counter from our smart contract, we must implement the `query_count` function. Begin by opening the [contract.rs](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/src/contract.rs) file and find the `query()` method:
 
 ```rust
 #[entry_point]
@@ -246,7 +246,7 @@ fn query_count(
 }
 ```
 
-In order to return the count of our contraact, we first need to load our contract's state. The counter contract uses a Singleton type for storage of the `State` data. The `config_read()` and `config()` methods are used to read and save to the contract's state respectively. Then we create the response and return our counter's value. 
+In order to return the count of our contract, we first need to load our contract's state. The counter contract uses a Singleton type for storage of the `State` data. The `config_read()` and `config()` methods are used to read and save to the contract's state respectively. Then we create the response and return our counter's value. 
 
 Substitute the code in `query_count()` for this:
 
@@ -276,7 +276,7 @@ cat ./contract.wasm | gzip -9 > ./contract.wasm.gz
 
 ### Unit Testing Our Query
 
-If you scroll down to the end of the [contract](/src/contract.rs) code, you'll see an area where we've coded our unit tests. We've already
+If you scroll down to the end of the [contract](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/src/contract.rs) code, you'll see an area where we've coded our unit tests. We've already
 implemented the `proper_initialization` unit test that includes a call to `query()`, passing the `QueryMsg::GetCount` 
 message.
 
@@ -463,7 +463,7 @@ should be able send.
 
 In the event that the caller of `reset` is *not* the contract owner, we return a `ContractError` enum variant stating the function is unauthorized. 
 
-> The [error.rs](/src/error.rs) file is a great spot to put all of your contract-specific errors for the `execute` messages.
+> The [error.rs](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/src/error.rs) file is a great spot to put all of your contract-specific errors for the `execute` messages.
 
 ### Increment and Reset Unit Tests
 
@@ -567,7 +567,7 @@ As the test is running you'll start to see additional activity in the node log a
 - stores and instantiates the counter contract
 - runs the increment and reset test functions
 
-![](/app/tutorial/illustrations/integration-tests-node-log.png)
+![](https://i.imgur.com/QV98fpR.png)
 
 Notice that we see a different contract code ID in the output of the integration tests:
 
@@ -603,7 +603,7 @@ the increment and reset functions with a web interface.
 
 ## Revise the Secret Counter Frontend
 
-Now, we'll modify the [SecretBox.vue](/app/src/components/SecretBox.vue) component and have it use the hash and address of our revised contract.
+Now, we'll modify the [SecretBox.vue](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/app/src/components/SecretBox.vue) component and have it use the hash and address of our revised contract.
 
 TBD
 
@@ -615,5 +615,5 @@ After going through this tutorial, we encourage you to go through this [Getting 
 
 If you're new to the Rust programming language, check out the [Rust Book](https://doc.rust-lang.org/book/) or the [Rustlings](https://github.com/rust-lang/rustlings) course.
 
-Secret's CosmWasm is based on vanilla CosmWasm, but there are some differences due to the privacy capabilities of the network. However, the CosmWasm [docs](https://docs.cosmwasm.com/docs/1.0/) are still an excellent resource for anyone looking to develop smart contracts in the Cosmos eocsystem.
+Secret's CosmWasm is based on vanilla CosmWasm, but there are some differences due to the privacy capabilities of the network. However, the CosmWasm [docs](https://docs.cosmwasm.com/docs/1.0/) are still an excellent resource for anyone looking to develop smart contracts in the Cosmos ecosystem.
 
