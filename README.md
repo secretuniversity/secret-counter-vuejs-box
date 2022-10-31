@@ -19,9 +19,9 @@ fully-implemented contract and application code are under the `app/tutorial/solu
 
 | Entry point  | Message(s)     | JSON                               |
 |--------------|----------------|------------------------------------|
-| instantiate  | InstantiateMsg | `{ "count": 16876 }` |
+| instantiate  | InstantiateMsg | `{ "count": 16876 }`               |
 | execute      | Increment      | `increment {}`                     |
-|              | Reset          | `reset {}`                         |
+|              | Reset          | `reset { "count": 56 }`            |
 | query        | GetCount       | `get_count {}`                     |
 
 <br/>

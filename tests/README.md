@@ -1,4 +1,4 @@
-# Secret Contract Integration Tests
+# Secret Counter Box Integration Tests
 
 This is an example of how to write integration tests in Typescript using `secret.js`.
 

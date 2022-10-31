@@ -15,11 +15,13 @@ pub fn instantiate(
     msg: InstantiateMsg,
 ) -> Result<Response, StdError> {
 
+    // create initial state with count and contract owner
     let state = State {
         count: msg.count,
         owner: info.sender.clone(),
     };
 
+    // save the contract state
     config(deps.storage).save(&state)?;
 
     deps.api.debug(&format!("Contract was initialized by {}", info.sender));
@@ -44,6 +46,11 @@ pub fn try_increment(
     deps: DepsMut,
 ) -> Result<Response, ContractError> {
 
+    //
+    // --- Solution ---
+    //
+
+    // Update state, incrementing counter by 1
     config(deps.storage).update(|mut state| -> Result<_, ContractError> {
         state.count += 1;
         Ok(state)
@@ -59,6 +66,11 @@ pub fn try_reset(
     count: i32,
 ) -> Result<Response, ContractError> {
 
+    //
+    // --- Solution ---
+    //
+
+    // Update state, setting counter to value
     config(deps.storage).update(|mut state| -> Result<_, ContractError> {
         if info.sender != state.owner {
             return Err(ContractError::Unauthorized {});
@@ -85,8 +97,18 @@ pub fn query(
 fn query_count(
     deps: Deps,
 ) -> StdResult<CountResponse> {
-    let state = config_read(deps.storage).load()?;
-    Ok(CountResponse { count: state.count })
+
+    //
+    // --- Solution ---
+    //
+
+    // 1. load state
+   let state = config_read(deps.storage).load()?;
+
+   deps.api.debug("count queried successfully");
+
+   // 2. return count response
+   Ok(CountResponse { count: state.count })
 }
 
 #[cfg(test)]
@@ -100,7 +122,7 @@ mod tests {
     fn proper_initialization() {
         let mut deps = mock_dependencies();
 
-        let msg = InstantiateMsg { count: 17 };
+        let msg = InstantiateMsg { count: 1000 };
         let info = mock_info("creator", &coins(1000, "earth"));
 
         // we can just call .unwrap() to assert this was a success
@@ -110,11 +132,16 @@ mod tests {
         // it worked, let's query the state
         let res = query(deps.as_ref(), mock_env(), QueryMsg::GetCount {}).unwrap();
         let value: CountResponse = from_binary(&res).unwrap();
-        assert_eq!(17, value.count);
+        assert_eq!(1000, value.count);
     }
 
     #[test]
     fn increment() {
+
+        //
+        // --- Solution ---
+        //
+
         let mut deps = mock_dependencies();
 
         let msg = InstantiateMsg { count: 17 };
@@ -134,6 +161,11 @@ mod tests {
 
     #[test]
     fn reset() {
+
+        //
+        // --- Solution ---
+        //
+
         let mut deps = mock_dependencies();
 
         let msg = InstantiateMsg { count: 17 };
