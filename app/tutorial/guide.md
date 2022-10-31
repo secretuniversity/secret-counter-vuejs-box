@@ -3,14 +3,14 @@
 ## Introduction
 This box is an introductory or beginner-level quickstart based on the [counter template contract](https://github.com/secretuniversity/secret-template-cw1).
 
-_Secret Counter_ is a secret contract that illustrates how to handle basic query and state changes (e.g. transactions) on the Secret Network.
+_Secret Counter_ is a contract that illustrates how to handle basic query and state changes (e.g. transactions) on the Secret Network.
 
 > You can think of a secret contract as smart, but in addition provides programmable privacy--meaning you decide what input, output and state data
 is public or private, depending on your use case or scenario.
 
 You'll notice that when launching this _Secret Couner Box_ on Gitpod, a workspace is opened that immediately takes care of a few things for you; including: 
 * setting up an online development environment for you to start coding
-* starting a `LocalSecret` blockchain instance, 
+* starting a `LocalSecret` blockchain instance
 * creating and deploying your smart contract to `LocalSecret`
 * and finally, starting the the VueJS web application: _Simple Secret Counter_.
 
@@ -685,7 +685,7 @@ The `secretbox.ts` perform these steps in order:
 - increments the counter and queries the new value to verify it was incremented by `1`
 - resets the counter to `56` and verifies by doing another counter query
 
-Congratulations, you've successfully completed your own _Secret Counter_ contract with both unit and integration tests. :tada: 
+Congratulations, you've successfully completed your first secret contract with both unit and integration tests. :tada: 
 
 **NEXT STEPS**
 
