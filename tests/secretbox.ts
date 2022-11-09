@@ -97,12 +97,12 @@ const resetCounter = async (
     `After increment, counter expected to be ${beforeCount + 1} instead of ${afterCount}`
   );
 
-  // Reset counter value to 56
-  await resetCounter(secretjs, 56)
+  // Reset counter value to 16876
+  await resetCounter(secretjs, 16876)
   const resetCount = await queryCounter(secretjs)
 
   assert(
-   resetCount == 56,
+   resetCount == 16876,
     `After reset, counter expected to be 56 instead of ${resetCount}`
   );
 

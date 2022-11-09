@@ -239,8 +239,8 @@ counter value (`msg.count`) and the contract owner `info.sender.clone()`.
     };
 ```
 
-Next, we'll save the `state` to the contract's storage, print a useful debug message in 
-the node logs, and then return the `Ok` enum with a default response.
+The next bit of code saves the `state` to the contract's storage, prints a debug message showing who the contract was created by, in 
+the node logs, and then returns the `Ok` enum with a default response.
 
 ```rust
     // Save the contract state
@@ -384,8 +384,7 @@ mod tests {
 ```
 **ACTION**
 
-Now, that we've modified the contract to return the actual value of the counter, we can change our initialization unit
-test so that it uses a different value from the hard-coded `16876`.
+Now, that we've modified the contract to return the actual value of the counter, we can change our `proper_initialization()` unit test so that it uses a different value from the hard-coded value of `16876`.
 
 Change the `InstantiateMsg` from:
 
@@ -438,7 +437,7 @@ Nicely done. If you've made it this far, you should have a good understanding of
 In the following steps, we'll work on coding the functions for the `Increment` and `Reset` messages, that are routed to the `execute()` entry point of our contract: 
 
 - Increment - adds 1 to the counter
-- Reset - set the value of the counter
+- Reset - set the value of the counter to _count_
 
 You'll notice we've already completed the `match` statement for two `ExecuteMsg` variants:
 
@@ -482,7 +481,7 @@ pub fn try_increment(
     deps: DepsMut,
 ) -> Result<Response, ContractError> {
 
-   // Update state, incrementing counter by 1
+    // Update state, incrementing counter by 1
     config(deps.storage).update(|mut state| -> Result<_, ContractError> {
         state.count += 1;
         Ok(state)
@@ -701,10 +700,10 @@ Basically, you'll be connecting the frontend to your backend contract using the 
 You might have noticed that when the _Secret Counter Box_ was launched, at the end of that process, you DApp or frontend was displayed in the browser window, 
 with an initial counter value of _0_. 
 
-> We'll be using [Secret.js](https://secretjs.scrt.network/) to interact with our contract. The docs cover the breadth of everything you can do with
-> `secretjs` and we recommend taking a look at those as you go through this tutorial.
+> We'll be using [Secret.js](https://secretjs.scrt.network/) to interact with the contract. The docs cover the breadth of everything you can do with
+> `secretjs` and we recommend taking a look at that information as you go through this tutorial.
 
-At this point, the `SecretBox.vue` component has hard-coded value of _0_ for the initial and reset value for the counter. 
+At this point, the `SecretBox.vue` component has a hard-coded value of _0_ for the initial and reset value for the counter. 
 
 **ACTION**
 
@@ -722,7 +721,7 @@ Now, let's modify the [SecretBox.vue]() component so that it:
 
 - imports the `Wallet` and `SecretNetworkClient` modules
 - defines the `secretjs` client variable that we'll use to establish a connection with our `localsecret` environment
-- defines the mnemonic for our `Wallet`
+- creates a _secret_ `Wallet` with the mnemonic that corresponds to one of the pre-defined [accounts](https://docs.scrt.network/secret-network-documentation/development/tools-and-libraries/local-secret#accounts) that `localsecret` comes with out of the box
 - sets up our secret box environment variables for the identifier, contract hash value, and the contract address
 
 > The _Simple Secret Counter_ frontend uses the settings published to `app/.env` to interact with the contract.
@@ -768,9 +767,9 @@ console.log(`contract address = ${secretBoxAddress}`)
 ```
 
 
-> If you open the browser Dev Tools window (Ctrl+Shift+I), you should see the console log messages from above. 
->
->![](https://i.imgur.com/0OiDReZ.png)
+If you open the browser Dev Tools window (Ctrl+Shift+I), you should see the console log messages from above. 
+
+![](https://i.imgur.com/2bh05in.png)
 
 ### Connect to LocalSecret
 
@@ -915,6 +914,8 @@ In the code above, we send a transaction that updates the contract's state by ca
 
 After the `increment` transaction is executed in a block, we do another `queryCounter()` call to get the changed value.
 
+**ACTION**
+
 Now, try incrementing the counter and you should see the counter value has now changed.
 
 > Because we're now connected to the `localsecret` blockchain, there's a slight delay between clicking the increment button, and the changed value
@@ -965,8 +966,9 @@ Try clicking the _Reset Counter?_ button.
 
 ![](https://i.imgur.com/ahBdkLp.png)
 
-Congratulations on completing this introductory _Secret Counter Box_ tutorial! We at [Secret University](https://scrt.university) hope you've not only
-enjoyed working through the **action** steps, but that you've also learned a bit of what Secret Contracts are all about.
+Congratulations on completing this introductory _Secret Counter Box_ tutorial!
+
+We at [Secret University](https://scrt.university) hope you've not only enjoyed working through the **ACTION** steps, but that you've also learned a bit of what Secret Contracts are all about.
 
 ## Further Reading
 
