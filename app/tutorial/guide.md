@@ -39,7 +39,7 @@ The design of our _Secret Counter_ contract accounts for two possible users:
 ### Project Structure
 
 The project structure includes an area for your contract logic, messages and state (`src/`), integration tests (`tests/`) and
-the _Simple Secret Counter_ application (`app/`). 
+the _Simple Secret Counter_ DApp (`app/`). 
 
 > We've marked the files you'll be modifying with red dots below.
 
@@ -256,7 +256,7 @@ And in the `LocalSecret` terminal, we can see that the output from the debug mes
 ![](https://i.imgur.com/W7rnLVd.png)
 
 **NEXT STEPS**
-We'll cover the exact steps to upload and instantiate your contract as part of the next steps to evolve your _Simple Secret Counter_ application. We'll also flesh out the details for the query, increment and reset functions.
+We'll cover the exact steps to upload and instantiate your contract as part of the next steps to evolve your _Simple Secret Counter_ DApp. We'll also flesh out the details for the query, increment and reset functions.
 
 ## Querying the Counter's Value
 
@@ -663,7 +663,7 @@ run the integration tests. These tests are written using [TypeScript](https://ww
 connect to `LocalSecret` and run your queries and transactions.
 
 > Writing integration tests is an important exercise as it involves having an external process interact with your contract. It's also helpful 
-when it comes time to develop the frontend of an application because it provides the examples of sending the query and execute messages to your 
+when it comes time to develop the frontend of a DApp because it provides the examples of sending the query and execute messages to your 
 contract.
 
 **ACTION**
@@ -685,11 +685,11 @@ The `secretbox.ts` perform these steps in order:
 - increments the counter and queries the new value to verify it was incremented by `1`
 - resets the counter to `56` and verifies by doing another counter query
 
-Congratulations, you've successfully completed your first secret contract with both unit and integration tests. :tada: 
+Congratulations! You've successfully completed your first secret contract with both unit and integration tests.
 
 **NEXT STEPS**
 
-In the next part of this tutorial, we'll modify the _Simple Secret Counter_ application to:
+In the next part of this tutorial, we'll modify the _Simple Secret Counter_ DApp to:
 
 - get the actual counter value from the contract
 - code the calls to the contract to increment and reset the counter 
@@ -698,7 +698,32 @@ Basically, you'll be connecting the frontend to your backend contract using the 
 
 ## Revising the Secret Counter Frontend
 
-Let's modify the [SecretBox.vue]() component.
+You might have noticed that when the _Secret Counter Box_ was launched, at the end of that process, you DApp or frontend was displayed in the browser window, 
+with an initial counter value of _0_. 
+
+> We'll be using [Secret.js](https://secretjs.scrt.network/) to interact with our contract. The docs cover the breadth of everything you can do with
+> `secretjs` and we recommend taking a look at those as you go through this tutorial.
+
+At this point, the `SecretBox.vue` component has hard-coded value of _0_ for the initial and reset value for the counter. 
+
+**ACTION**
+
+Go ahead and try out the counter now, clicking the _+_ button, and then click on the _Reset Counter?_.
+
+### Add the Secret Network Client and Wallet
+
+> You'll notice that the incrementing and resetting happens very quickly. After you've "wired" your frontend to the backend contract, it won't be
+> as quick because the `localsecret` blockchain has a block time of approximately 5-6s, which is how long it takes to get your `increment` and 
+> `reset` transactions included in the next block that's committed to the network.
+
+![](https://i.imgur.com/SDjq1Hv.png)
+
+Now, let's modify the [SecretBox.vue]() component so that it:
+
+- imports the `Wallet` and `SecretNetworkClient` modules
+- defines the `secretjs` client variable that we'll use to establish a connection with our `localsecret` environment
+- defines the mnemonic for our `Wallet`
+- sets up our secret box environment variables for the identifier, contract hash value, and the contract address
 
 > The _Simple Secret Counter_ frontend uses the settings published to `app/.env` to interact with the contract.
 >
@@ -709,14 +734,255 @@ Let's modify the [SecretBox.vue]() component.
 > VITE_SECRET_BOX_HASH=0xa92402fd34057f79f7af6101d25d20c05b960ed88c82932657d87889f046d2d2
 > ```
 
+**ACTION**
+
+Change the following code at the top of [SecretBox.vue]():
+
+```typescript
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+```
+
+to:
+
+```typescript
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { Wallet, SecretNetworkClient } from "secretjs"
+
+// Secret.js Client
+let secretjs: SecretNetworkClient
+
+const wallet = new Wallet(
+  "grant rice replace explain federal release fix clever romance raise often wild taxi quarter soccer fiber love must tape steak together observe swap guitar"
+)
+
+// Get environment variables from .env
+const secretBoxCode = import.meta.env.VITE_SECRET_BOX_CODE
+const secretBoxHash = import.meta.env.VITE_SECRET_BOX_HASH
+const secretBoxAddress = import.meta.env.VITE_SECRET_BOX_ADDRESS
+
+console.log(`code id = ${secretBoxCode}`)
+console.log(`contract hash = ${secretBoxHash}`)
+console.log(`contract address = ${secretBoxAddress}`)
+```
+
+
+> If you open the browser Dev Tools window (Ctrl+Shift+I), you should see the console log messages from above. 
+>
+>![](https://i.imgur.com/0OiDReZ.png)
+
+### Connect to LocalSecret
+
+At this point we haven't actually connected to the `localsecret` network yet. Let's do that next.
+
+**ACTION**
+
+Change the `onMounted()` function from:
+
+```typescript
+onMounted(async () => {
+  window.addEventListener('scroll', handleScroll)
+})
+```
+
+to:
+
+```typescript
+onMounted(async () => {
+  window.addEventListener('scroll', handleScroll)
+
+   // To create a signer secret.js client, also pass in a wallet
+   console.log("Initializing Secret.js client ...")
+  secretjs = await SecretNetworkClient.create({
+    grpcWebUrl: "http://localhost:9091",
+    chainId: "secretdev-1",
+    wallet: wallet,
+    walletAddress: wallet.address,
+  })
+
+  console.log(`Created client for wallet address: ${wallet.address}`)
+
+  count.value = await queryCounter()
+})
+```
+
+In the code above, we're creating a client for `localsecret` using the wallet we setup. Once the DApp has connected to the network, you're ready
+to start making queries and sending transactions to the _Secret Counter_ contract.
+
+### Query the Counter Value
+
+At the end of the `onMounted` function above, you'll notice that as the last task we're calling the `queryCounter()` function to display
+the initial value. But, it's not actually sending the query to your contract yet.
+
+**ACTION**
+
+Change the `queryCounter() function from:
+
+```typescript
+const queryCounter = () => {
+  return count.value
+}
+```
+
+to:
+
+```typescript
+const queryCounter = async () => {
+  type CountResponse = { count: number }
+
+  const response = (await secretjs.query.compute.queryContract({
+    contractAddress: secretBoxAddress,
+    codeHash: secretBoxHash,
+    query: { get_count: {} },
+  })) as CountResponse;
+
+  if ('err"' in response) {
+    throw new Error(
+      `Query failed with the following err: ${JSON.stringify(response)}`
+    )
+  }
+
+  return response.count
+}
+```
+
+To send a query message to your contract, you specify the contract's address and it's hash (this is optional, but faster if you include the contract hash). 
+Remember that we defined a `QueryCount` message for the contract and the way to send that is to convert it to it's snake case equivalent:
+
+```typescript
+GetCount: { }
+```
+
+is called from the DApp as:
+
+```typescript
+get_count: { }
+```
+
+
+> Remember that the `secret counter` contract was instantiated with an initial value of `16876`.
+
+and back in the _Simple Counter_ frontend, you'll see it's picking up the actual counter value. We're on our way now!
+
+![](https://i.imgur.com/Ll0i2fx.png)
+
+### Increment the Counter
+
+If you click the _+_ button to increment the counter, you'll notice that the counter is incremented, but if you reload the page, the counter value
+that's displayed is still `16876`. That's because we haven't modified the `increment()` function to send the transaction to `LocalSecret`. The counter 
+value stored in the contract's state has not been changed yet.
+
+**ACTION**
+
+Change the `incrementCounter()` function from:
+
+```typescript
+const incrementCounter = () => {
+  count.value++
+}
+```
+
+to:
+
+```typescript
+const incrementCounter = async () => {
+  const tx = await secretjs.tx.compute.executeContract(
+  {
+    sender: wallet.address,
+    contractAddress: secretBoxAddress,
+    codeHash: secretBoxHash,
+    msg: {
+      increment: {},
+    },
+  },
+  {
+    gasLimit: 1_000_000,
+  })
+
+  console.log("Increment by 1")
+  count.value = await queryCounter()
+}
+```
+
+In the code above, we send a transaction that updates the contract's state by calling `secretjs.tx.compute.executeContract()`, supplying:
+
+- sender's wallet address
+- contract address
+- contract hash
+- the `Increment` message
+- the gas limit for our transaction sets a "meter" to limit the amount of gas paid for in fees
+
+After the `increment` transaction is executed in a block, we do another `queryCounter()` call to get the changed value.
+
+Now, try incrementing the counter and you should see the counter value has now changed.
+
+> Because we're now connected to the `localsecret` blockchain, there's a slight delay between clicking the increment button, and the changed value
+> in the frontend.
+
+### Reset the Counter
+
+At this point, since we haven't modified the `resetCounter()` function when you click the _Reset Counter?_ button, you'll see the value is reset
+to _0_, but reloading the page will show that the counter is still at the last incremented value.
+
+**ACTION**
+
+Change the `resetCounter()` function from:
+
+```typescript
+const resetCounter = () => {
+  count.value = 0
+}
+```
+
+to:
+
+```typescript
+const resetCounter = async () => {
+  const tx = await secretjs.tx.compute.executeContract(
+  {
+    sender: wallet.address,
+    contractAddress: secretBoxAddress,
+    codeHash: secretBoxHash,
+    msg: {
+      reset: { count: 56 },
+    },
+  },
+  {
+    gasLimit: 1_000_000,
+  })
+
+  console.log("Counter reset")
+  count.value = await queryCounter()
+}
+```
+
+The `resetCounter()` function is pretty much the same except that we're sending a `count` value of `56` to the contract.
+
+Try clicking the _Reset Counter?_ button. 
+
+> Notice that the `resetCounter()` function is sending the "reset" message with a value of `56` and the frontend should now be displaying that value.
+
+![](https://i.imgur.com/ahBdkLp.png)
+
+Congratulations on completing this introductory _Secret Counter Box_ tutorial! We at [Secret University](https://scrt.university) hope you've not only
+enjoyed working through the **action** steps, but that you've also learned a bit of what Secret Contracts are all about.
 
 ## Further Reading
 
-- After going through this tutorial, we encourage you to go through this [Getting Started Guide](https://docs.scrt.network/secret-network-documentation/development/getting-started) for further learning.
+- After going through this tutorial, we encourage you to go through this [Getting Started Guide](https://docs.scrt.network/secret-network-documentation/development/getting-started) for further learning on secret contracts.
 
 - If you're new to the Rust programming language, check out the [Rust Book](https://doc.rust-lang.org/book/) or the [Rustlings](https://github.com/rust-lang/rustlings) course.
 
 - Another fun way to learn Rust that's interactive is [Tour of Rust](https://tourofrust.com).
 
 - Secret's CosmWasm is based on vanilla CosmWasm, but there are some differences due to the privacy capabilities of the network. However, the CosmWasm [docs](https://docs.cosmwasm.com/docs/1.0/) are still an excellent resource for anyone looking to develop smart contracts in the Cosmos ecosystem.
+
+- For connecting the frontend to Secret Network and interacting, we recommend studying the [Secret.js](https://secretjs.scrt.network/) docs.
+
+- If you're not familiar with Javascript or Typescript, we recommend these resources: 
+
+    - [Learn Javascript Online](https://learnjavascript.online)
+    - [Learn Typescript](https://www.typescriptlang.org/docs)
+
 

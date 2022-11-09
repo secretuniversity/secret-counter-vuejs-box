@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { Wallet, SecretNetworkClient, fromUtf8 } from "secretjs"
+import { Wallet, SecretNetworkClient } from "secretjs"
 
 // Secret.js Client
 let secretjs: SecretNetworkClient
