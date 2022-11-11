@@ -19,6 +19,7 @@ You'll notice that when launching this _Secret Couner Box_ on Gitpod, a workspac
 * and finally, starting the the VueJS web application: _Simple Secret Counter_.
 
 There should be three terminal windows in your Gitpod workspace:
+
 1. `LocalSecret` - the first terminal shows the blockchain starting up and producing blocks
 2. `Secret Box workspace` - the 2nd terminal is where your contract gets compiled, deployed, and is the window you'll use to enter commands as you go through this tutorial
 3. `Simple Secret Counter` - the 3rd terminal is where your application server is launched, after the local network is running and the _Secret Counter_ contract has been created
@@ -35,15 +36,14 @@ In the next sections, we'll take a look at the overall architecture and design o
 
 The design of our _Secret Counter_ contract accounts for two possible users: 
 
-1) The contract owner (you) who instantiates the contract 
-2) The general user of our contract who can query, increment, and reset the counter.
+- The contract owner (you) who instantiates the contract 
+- The general user of our contract who can query, increment, and reset the counter.
 
 ![](https://i.imgur.com/z3R428U.png)
 
 ### Project Structure
 
-The project structure includes an area for your contract logic, messages and state (`src/`), integration tests (`tests/`) and
-the _Simple Secret Counter_ DApp (`app/`). 
+The project structure includes an area for your contract logic, messages and state (`src/`), integration tests (`tests/`) and the _Simple Secret Counter_ DApp (`app/`). 
 
 > We've marked the files you'll be modifying with red dots below.
 
@@ -53,11 +53,11 @@ the _Simple Secret Counter_ DApp (`app/`).
 
 A Secret contract, which is based on [CosmWasm](https://docs.cosmwasm.com) smart contracts, contains **3 entry points** we are able to interact with:
 
-1. `instantiate()` - receives the `InstantiateMsg` and saves the initial value of the counter to the contract state. The instantiation of a CosmWasm smart contract is performed by the contract owner.
+- `instantiate()` - receives the `InstantiateMsg` and saves the initial value of the counter to the contract state. The instantiation of a CosmWasm smart contract is performed by the contract owner.
 
-2. `execute()` - handles transaction which mutate or change the state of the contract. In our case, the `Increment` and `Reset` messages are handled here to update the counter's value.
+- `execute()` - handles transaction which mutate or change the state of the contract. In our case, the `Increment` and `Reset` messages are handled here to update the counter's value.
 
-3. `query()` - handles messages which do **not** change the state of the contract. To recieve the counter's state we'll utilize the `QueryCount` message.
+- `query()` - handles messages which do **not** change the state of the contract. To recieve the counter's state we'll utilize the `QueryCount` message.
 
 A good place to start when developing secret contracts is to design the messages, defined in the [msg.rs](), that will be handled by your contract's entry points.
 
