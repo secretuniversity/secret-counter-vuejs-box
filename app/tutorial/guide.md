@@ -1,11 +1,11 @@
 # Secret Counter Box Tutorial
 
-For an optimal secret box experience and viewing, we recommend that you "pop out" the _Simple Counter DApp_ so that it's displayed in a separate browser tab from the Gitpod workspace:
-
-![](https://i.imgur.com/z9Pescq.png)
-
 ## Introduction
 This box is an introductory or beginner-level quickstart based on the [counter template contract](https://github.com/secretuniversity/secret-template-cw1).
+
+For an optimal secret box experience, we recommend that you "pop out" the _Simple Counter DApp_ so that it's displayed in a separate browser tab from the Gitpod workspace:
+
+![](https://i.imgur.com/z9Pescq.png)
 
 _Secret Counter_ is a contract that illustrates how to handle basic query and state changes (e.g. transactions) on the Secret Network.
 
