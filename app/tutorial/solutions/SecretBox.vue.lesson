@@ -35,7 +35,7 @@ function isDark() {
 function handleScroll() {
   if (showApp) {
     // To collapse App when user scrolls:
-    showApp.value = false
+    // showApp.value = false
   }
 }
 
