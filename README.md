@@ -1,7 +1,7 @@
 ## Secret Counter Box
 <br/>
 
-[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box)
+<!-- [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box) -->
 
 The Secret Counter Box is a Gitpod-enabled quickstart for dapp development on [Secret Network](https://scrt.network).
 It consists of a frontend (Vue + Vite + Typescript) and a secret contract (Rust + Secret CosmWasm), based on the [secret counter template](https://github.com/secretuniversity/secret-template-cw1).
@@ -37,7 +37,8 @@ Use this [guide](/app/tutorial/guide.md) to view the tutorial and complete the S
 
 <br/>
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box)
+<!-- 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box) -->
 
 <br/>
 
@@ -96,12 +97,12 @@ These are great examples of interacting with the Secret Network and can be used 
 These commands apply to the frontend of the Secret Box and are run from the `app` directory:
 
 
-| Command           | Action                                       |
-|:----------------  |:-------------------------------------------- |
-| `yarn`         | Installs dependencies                        |
+| Command        | Action                                                   |
+|:-------------- |:-------------------------------------------------------- |
+| `yarn`         | Installs dependencies                                    |
 | `yarn dev`     | Starts local Vite dev server at `http://localhost:5173`  |
-| `yarn build`   | Build your production site to `./dist/`      |
-| `yarn preview` | Preview your build locally, before deploying |
+| `yarn build`   | Build your production site to `./dist/`                  |
+| `yarn preview` | Preview your build locally, before deploying             |
 
 ## LocalSecret LCD
 
@@ -115,6 +116,7 @@ From within a local development environment, you can query and post transactions
 Checkout the http://localhost:1317/swagger/ UI which makes it easy to interact with the node. Or use 
 http://localhost:1317/openapi/ to view the queries, transactions and parameters that are available.
 
+<!-- 
 ### Gitpod Workspace
 
 When using the Gitpod workspace, prepend the port number to the Gitpod URL. 
@@ -128,6 +130,7 @@ To use the Swagger or OpenAPI interaces append `/swagger/` or `/openapi/` to the
 `https://1317-secretunive-secretboxvi-zyc1kppqbvk.ws-us69.gitpod.io/swagger/`
 
 ![](docs/swagger-interface.png)
+-->
 
 # Resources
 - [Secret Network](https://docs.scrt.network) - official Secret Network documentation and guides
