@@ -287,7 +287,7 @@ VITE_SECRET_BOX_CODE=1 VITE_SECRET_BOX_ADDRESS=secret18vd8fpwxzck93qlwghaj6arh4p
 Finally, in a 3rd terminal window (we'll call this window `Simple Secret Counter`) install the dependencies and launch the Vite dev server.
 
 ```bash
-cd $HOME/secret-counter-vuejs-box
+cd $HOME/secret-counter-vuejs-box/app
 yarn install
 yarn dev
 ```
@@ -299,7 +299,7 @@ The integration tests are run using Typescript. We'll install the dependencies *
 In the `Secret Box workspace` terminal, run the following comands:
 
 ```bash
-cd $HOME/secret-counter-vuejs-box
+cd $HOME/secret-counter-vuejs-box/tests
 npm install
 ```
 
