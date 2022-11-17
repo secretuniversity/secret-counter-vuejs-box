@@ -3,34 +3,37 @@
 ## Introduction
 This box is an introductory or beginner-level quickstart based on the [counter template contract](https://github.com/secretuniversity/secret-template-cw1).
 
-For an optimal secret box experience, we recommend that you "pop out" the _Simple Counter DApp_ so that it's displayed in a separate browser tab from the Gitpod workspace:
-
-![](https://i.imgur.com/z9Pescq.png)
 
 _Secret Counter_ is a contract that illustrates how to handle basic query and state changes (e.g. transactions) on the Secret Network.
 
 > You can think of a secret contract as smart, but in addition provides programmable privacy--meaning you decide what input, output and state data
 is public or private, depending on your use case or scenario.
 
-You'll notice that when launching this _Secret Couner Box_ on Gitpod, a workspace is opened that immediately takes care of a few things for you; including: 
-* setting up an online development environment for you to start coding
-* starting a `LocalSecret` blockchain instance
-* creating and deploying your smart contract to `LocalSecret`
-* and finally, starting the the VueJS web application: _Simple Secret Counter_.
-
-There should be three terminal windows in your Gitpod workspace:
-
-1. `LocalSecret` - the first terminal shows the blockchain starting up and producing blocks
-2. `Secret Box workspace` - the 2nd terminal is where your contract gets compiled, deployed, and is the window you'll use to enter commands as you go through this tutorial
-3. `Simple Secret Counter` - the 3rd terminal is where your application server is launched, after the local network is running and the _Secret Counter_ contract has been created
-
-In the next sections, we'll take a look at the overall architecture and design of our smart contract, go through the creation of your contract, and then you'll get a chance to modify your contract and application code to:
+In the next sections, we'll take a look at the overall architecture and design of our smart contract, setup your local development environment, go through the creation of your contract, and then you'll get a chance to modify your contract and application code to:
 
 - query the contract's counter value
 - increment the counter's value
 - and reset the counter
 
 > While the frontend allows you to reset and click the '+' button to increment the counter, the contract's state is unchanged because we haven't "wired" the frontend to the backend contract yet.
+
+### Setup Your Environment
+
+#### Installation
+
+To setup your local development environment follow the instructions [here](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/app/tutorial/setting-up-your-environment.md).
+
+At this point you've setup your _Secret Couner Box_ workspace including: 
+* the developer environment
+* started a `LocalSecret` blockchain instance
+* created and deployed your smart contract to `LocalSecret`
+* and finally, starting the the VueJS web application: _Simple Secret Counter_.
+
+At this point, you should have the following three terminal windows open in your local environment:
+
+1. `LocalSecret` - the first terminal shows the blockchain starting up and producing blocks
+2. `Secret Box workspace` - the 2nd terminal is where your contract gets compiled, deployed, and is the window you'll use to enter commands as you go through this tutorial
+3. `Simple Secret Counter` - the 3rd terminal is where your application server is launched, after the local network is running and the _Secret Counter_ contract has been created
 
 ## Contract Architecture
 
@@ -653,6 +656,8 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 Now that you've got all of your contract's functionality implemented, and the unit tests are passing, it's time to re-compile and
 deploy the revised version of your _Secret Counter_ contract.
 
+Use the `Secret Box workspace` terminal to run the following command:
+
 ```bash
 ./scripts/create_secretbox.sh
 ```
@@ -976,7 +981,7 @@ We at [Secret University](https://scrt.university) hope you've not only enjoyed 
 
 ## Further Reading
 
-- After going through this tutorial, we encourage you to go through this [Getting Started Guide](https://docs.scrt.network/secret-network-documentation/development/getting-started) for further learning on secret contracts.
+- After going through this tutorial, we encourage you to go through this [Getting Started Guide](https://docs.scrt.network/secret-network-documentation/development/getting-started) for further learning on secret contracts and a breakdown on the Secret Millionaires' Problem contract.
 
 - If you're new to the Rust programming language, check out the [Rust Book](https://doc.rust-lang.org/book/) or the [Rustlings](https://github.com/rust-lang/rustlings) course.
 
