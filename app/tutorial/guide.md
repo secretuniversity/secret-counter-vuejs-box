@@ -659,7 +659,7 @@ deploy the revised version of your _Secret Counter_ contract.
 Use the `Secret Box workspace` terminal to run the following command:
 
 ```bash
-./scripts/create_secretbox.sh
+./scripts/create_secret_box.sh
 ```
 > The `create_secretbox.sh` script compiles the contract, uploads it to `LocalSecret` and then saves the contract ID, hash and address to 
 `.env` files to be used in your `Secret Box workspace` terminal, the integration tests, and the `Simple Secret Counter` frontend.

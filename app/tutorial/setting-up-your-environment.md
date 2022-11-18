@@ -144,6 +144,12 @@ chmod 755 secretcli
 
 For a more detailed and in-depth guide on SecretCLI installation and usage, check out the [documentation](https://docs.scrt.network/secret-network-documentation/development/secret-cli)
 
+### Install the JSON Processor (JQ)
+
+JQ is a JSON processor that is used by the script to create a secret box (you'll run that command as part of the tutorial).
+
+Download `jq` for your system [here](https://stedolan.github.io/jq). If you're interested in learning more, check out the docs [here](https://github.com/stedolan/jq/wiki/jq-Language-Description).
+
 ### Install LocalSecret
 
 We recommend using a local chain for development purposes. `LocalSecret` is a complete Secret Network testnet and ecosystem containerized with Docker. It simplifies the way secret contract developers test their contracts in a sandbox before they deploy them on a testnet or mainnet.
