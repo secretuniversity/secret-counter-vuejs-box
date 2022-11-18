@@ -148,7 +148,37 @@ For a more detailed and in-depth guide on SecretCLI installation and usage, chec
 
 JQ is a JSON processor that is used by the script to create a secret box (you'll run that command as part of the tutorial).
 
-Download `jq` for your system [here](https://stedolan.github.io/jq). If you're interested in learning more, check out the docs [here](https://github.com/stedolan/jq/wiki/jq-Language-Description).
+##### Linux/WSL
+
+```bash
+sudo apt install jq
+```
+
+#### Powershell
+
+Use the `chocolatey` package manager for Windows (information and installation [here](https://chocolatey.org) to install `jq`.
+
+```bash
+choco install jq
+```
+
+##### MacOS
+
+Install the _Brew_ package manager for Mac:
+
+```bash
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" < /dev/null 2> /dev/null
+```
+
+Then, use `brew` to install `jq`:
+
+```bash
+brew install jq
+```
+
+Other options for dowloading `jq` can be found [here](https://stedolan.github.io/jq).
+
+If you're interested in learning more, check out the docs [here](https://github.com/stedolan/jq/wiki/jq-Language-Description).
 
 ### Install LocalSecret
 
