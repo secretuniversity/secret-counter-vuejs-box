@@ -249,8 +249,7 @@ function main() {
 
     log 'Returning environment variables for Gitpod workspace'
     # If everything else worked, return successful status
-    # Return env variables for Gitpod workspace
-    echo "VITE_SECRET_BOX_CODE=$code_id VITE_SECRET_BOX_ADDRESS=$contract_addr VITE_SECRET_BOX_HASH=$contract_hash"
+    echo "SECRET_BOX_CODE=$code_id SECRET_BOX_ADDRESS=$contract_addr SECRET_BOX_HASH=$contract_hash"
     return 0
 }
 
