@@ -1,13 +1,12 @@
 ## Secret Counter Box
-<br/>
 
-<!-- [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box) -->
+_(Brought to you by [Secret University](https;//scrt.university))_
 
-The Secret Counter Box is a Gitpod-enabled quickstart for dapp development on [Secret Network](https://scrt.network).
-It consists of a frontend (Vue + Vite + Typescript) and a secret contract (Rust + Secret CosmWasm), based on the [secret counter template](https://github.com/secretuniversity/secret-template-cw1).
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box)
 
-This is a beginner-level box and is for developers new to secret contract development. It illustrates the basics
-of instantiating a secret contract, and handling queries and transactions that modify state data.
+The Secret Counter Box is a quickstart for dapp development on [Secret Network](https://scrt.network). It consists of a frontend (Vue + Vite + Typescript) and a secret contract (Rust + Secret CosmWasm), based on the [secret counter template](https://github.com/secretuniversity/secret-template-cw1).
+
+This is a beginner-level box and is for developers new to secret contract development. It illustrates the basics of instantiating a secret contract, and handling queries and transactions that modify state data.
 
 ![](docs/secret-counter-app.png)
 
@@ -28,45 +27,29 @@ fully-implemented contract and application code are under the `app/tutorial/solu
 
 ## Getting Started
 
-To get started, use the "Open in Gitpod" button below to launch the Secret Counter app. 
+To get started with this `Secret Box` you can either open it in the Gitpod developer sandbox, or setup your local environment. The Gitpod workspace will save you time, as
+a lot of the heavy lifting, such as pulling the `LocalSecret` docker image and installation of `Rust` and `cargo`, are completed for you in a pre-build task. 
 
-When the workspace is launched, you'll notice that a local version of the Secret Network blockchain is started 
-for you.
+Once you're environment is ready to go, use this [guide](/app/tutorial/guide.md) to view the tutorial and complete the Secret Box code!
 
-Use this [guide](/app/tutorial/guide.md) to view the tutorial and complete the Secret Box code.
+### Gitpod Workspace
 
-<br/>
+Use the "Open in Gitpod" button below to launch the `Secret Counter Box`.
 
-<!-- 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box) -->
 
-<br/>
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box)
 
-## Setup Your Local Developer Environment
+### Local Environment Setup
 
-If you're interested in working with this Secret Box locally, use the
-[Setting Up Your Environment](https://docs.scrt.network/secret-network-documentation/development/getting-started/setting-up-your-environment) guide to install the tools and libraries needed to develop secret contracts.
-
-In addition to the Secret Contract setup, you will also need to install `Nodejs`, `yarn`, and `ts-node` for the 
-integration tests and frontend app.
-
-### Install Nodejs
-
-Use the installer for your environment [here](https://nodejs.dev/en/download).
-
-### Install Yarn
-
-You can find information on installing `yarn`, getting started, advanced topics and more [here](https://yarnpkg.com).
-
-### Install ts-node
-
-`ts-node` is a TypeScript engine for node.js and is used for the integration tests which are written in Typescript.
-
-```
-npm install -D ts-node
-```
+If you prefer to get started with this Secret Box locally, use the [Setting Up Your Environment](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/app/tutorial/setting-up-your-environment.md) guide to install the required infrastructure. The guide will also walk you through launching the `LocalSecret` blockchain, building, testing and deploying the `secret counter` contract.
 
 ## Commands & Usage
+
+The commands are broken into the following categories:
+
+- working with the secret counter contract
+- running the integration tests
+- setting up and launching the `Simple Secret Counter DApp`
 
 ### Secret Contract
 
@@ -115,8 +98,7 @@ From within a local development environment, you can query and post transactions
 
 Checkout the http://localhost:1317/swagger/ UI which makes it easy to interact with the node. Or use 
 http://localhost:1317/openapi/ to view the queries, transactions and parameters that are available.
-
-<!-- 
+ 
 ### Gitpod Workspace
 
 When using the Gitpod workspace, prepend the port number to the Gitpod URL. 
@@ -130,7 +112,6 @@ To use the Swagger or OpenAPI interaces append `/swagger/` or `/openapi/` to the
 `https://1317-secretunive-secretboxvi-zyc1kppqbvk.ws-us69.gitpod.io/swagger/`
 
 ![](docs/swagger-interface.png)
--->
 
 # Resources
 - [Secret Network](https://docs.scrt.network) - official Secret Network documentation and guides
