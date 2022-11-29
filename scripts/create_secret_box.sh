@@ -231,17 +231,13 @@ function main() {
 
     log '\nSecret Box created successfully!\n'
 
-    VITE_SECRET_BOX_CODE="$code_id"
-    VITE_SECRET_BOX_ADDRESS="$contract_addr"
-    VITE_SECRET_BOX_HASH="$contract_hash"
-
     log "secret counter code id: $code_id"
     log "secret counter contract address: $contract_addr"
     log -e "secret counter contract code hash: $contract_hash\n"
 
     log 'Storing environment variables:'
     echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash" > .env
-    echo "VITE_SECRET_BOX_CODE=$code_id\nVITE_SECRET_BOX_ADDRESS=$contract_addr\nVITE_SECRET_BOX_HASH=$contract_hash" > app/.env
+    echo -e "VITE_SECRET_BOX_CODE=$code_id\nVITE_SECRET_BOX_ADDRESS=$contract_addr\nVITE_SECRET_BOX_HASH=$contract_hash" > app/.env
     echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash" > tests/.env
     log "\n==="
     log "=== Use 'source .env' to set the SECRET BOX environment variables in your local bash shell"
