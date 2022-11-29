@@ -77,6 +77,12 @@ tasks:
     command: |
       gp sync-await secretbox-contract
       cd app
+      #
+      # Need to unset the VITE env vars so that the new values are read when app/.env is updated
+      #
+      unset VITE_SECRET_BOX_CODE
+      unset VITE_SECRET_BOX_ADDRESS
+      unset VITE_SECRET_BOX_HASH
       yarn dev
     openMode: split-right
 
