@@ -1,99 +1,109 @@
 <template>
-  <div id="guide">
+  <div id="guide" class="relative max-w-[60%] mx-auto">
     <Guide />
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, onMounted } from 'vue';
-import Guide from '../../tutorial/guide.md'
-import rust from 'highlight.js/lib/languages/rust';
-import hljs from 'highlight.js';
-
+import { defineComponent, onMounted } from "vue";
+import Guide from "../../tutorial/guide.md";
+import rust from "highlight.js/lib/languages/rust";
+import hljs from "highlight.js";
+import type { TableOfContentsPart } from "../types";
 
 onMounted(() => {
-  const guide = document.getElementById('guide');
+  const guide = document.getElementById("guide");
 
-  
   if (guide) {
-    const els = Array.from(guide.querySelectorAll('h2, h3, h4, h5, h6'));
+    const els = Array.from(guide.querySelectorAll("h2, h3, h4, h5, h6"));
 
     els.forEach((el) => {
-      const id = slugify(el.innerHTML);
-      el.setAttribute('id', id);
+      const id = slugify(el.innerHTML.replace(/<span.*<\/span>/, ""));
+
+      const anchor = document.createElement("span");
+      anchor.setAttribute("id", "anchor-" + id);
+      anchor.classList.add(...["absolute", "-top-[6rem]"]);
+
+      el.setAttribute("id", id);
+      el.classList.add(...["relative"]);
+      el.appendChild(anchor);
     });
 
-    const sections: string[] = els.map(heading => heading.innerHTML);
+    const sections: TableOfContentsPart[] = els.map((heading) => {
+      return {
+        name: heading.innerHTML.replace(/<span.*<\/span>/, ""),
+        kind: heading.tagName.toLowerCase(),
+      };
+    });
 
-    emit('headings', sections);
+    emit("headings", sections);
   }
-  
-  hljs.registerLanguage('rust', rust);
-  hljs.highlightAll()
+
+  hljs.registerLanguage("rust", rust);
+  hljs.highlightAll();
 });
 
 const emit = defineEmits<{
-    (e: 'headings', sections: string[]): void;
+  (e: "headings", sections: TableOfContentsPart[]): void;
 }>();
 
 const slugify = (str: string) => {
-    return str
-        .toLowerCase()
-        .replace(/[^a-z0-9]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '')
-}
-
+  return str
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+};
 
 defineComponent({
   components: {
-    Guide
-  }
-})
+    Guide,
+  },
+});
 </script>
 
 <style>
 #guide h1 {
-  @apply font-medium mb-8 leading-7 tracking-widest text-2xl mt-4
+  @apply font-medium my-16 leading-7 tracking-widest text-3xl;
 }
 
 #guide h2 {
-  @apply font-medium mb-6 leading-7 tracking-widest mt-3
+  @apply font-medium my-12 leading-7 tracking-widest text-2xl;
 }
 
 #guide h3 {
-  @apply mb-6 leading-7 tracking-widest mt-3
+  @apply my-8 leading-7 tracking-widest text-xl;
 }
 
 #guide h4 {
-  @apply mb-6 leading-7 tracking-wide mt-3
+  @apply my-8 leading-7 tracking-wide text-lg;
 }
 
 #guide h5 {
-  @apply mb-6 leading-7 mt-3
+  @apply my-6 leading-7;
 }
 
 #guide p {
-  @apply mb-4
+  @apply my-0.5;
 }
 
 #guide ul {
-  @apply list-disc pl-8 mb-4
+  @apply list-disc pl-8 my-4;
 }
 
 #guide pre {
-  @apply border border-[#E0E0E0] rounded-md mb-4 py-4 px-6
+  @apply border border-[#E0E0E0] rounded-md mb-4 py-4 px-6;
 }
 
 #guide blockquote {
-  @apply bg-box-yellow rounded-md p-4 mb-4 dark:text-black
+  @apply bg-box-yellow rounded-md p-4 my-6 dark:text-black;
 }
 
 #guide blockquote > p {
-  @apply mb-0
+  @apply mb-0;
 }
 
 #guide a {
-  @apply text-[#647FFF] hover:text-[#647FFF] dark:hover:text-[#647FFF] dark:text-[#647FFF] cursor-pointer
+  @apply text-[#647FFF] hover:text-[#647FFF] dark:hover:text-[#647FFF] dark:text-[#647FFF] cursor-pointer;
 }
 </style>
