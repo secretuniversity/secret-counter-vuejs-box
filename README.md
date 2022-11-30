@@ -74,7 +74,7 @@ These are great examples of interacting with the Secret Network and can be used 
 
 | Command                       | Action                                                    |
 |:----------------------------  |:--------------------------------------------------------  |
-| `npx ts-node integration.ts`  | Runs the integration tests                                |
+| `npx ts-node secretbox.ts`    | Runs the integration tests                                |
 
 
 ### Frontend App
