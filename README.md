@@ -39,9 +39,11 @@ Use the "Open in Gitpod" button below to launch the `Secret Counter Box`.
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box)
 
+Then, follow this [Setting Up Your Gitpod Workspace](/docs/setting-up-your-gitpod-workspace.md) guide to complete your setup.
+
 ### Local Environment Setup
 
-If you prefer to get started with this Secret Box locally, use the [Setting Up Your Environment](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/app/tutorial/setting-up-your-environment.md) guide to install the required infrastructure. The guide will also walk you through launching the `LocalSecret` blockchain, building, testing and deploying the `secret counter` contract.
+If you prefer to get started with this Secret Box locally, use the [Setting Up Your Environment](/docs/setting-up-your-environment.md) guide to install the required infrastructure. The guide will also walk you through launching the `LocalSecret` blockchain, building, testing and deploying the `secret counter` contract.
 
 ## Commands & Usage
 
