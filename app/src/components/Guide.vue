@@ -94,6 +94,10 @@ defineComponent({
   @apply border border-[#E0E0E0] rounded-md mb-4 py-4 px-6;
 }
 
+#guide code {
+  @apply whitespace-pre-wrap inline-block bg-transparent break-all;
+}
+
 #guide blockquote {
   @apply bg-box-yellow rounded-md p-4 my-6 dark:text-black;
 }
