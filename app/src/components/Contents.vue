@@ -1,21 +1,43 @@
 <template>
   <div
-    class="flex-col w-full pl-16 pt-12 sticky top-0 max-h-screen overflow-y-auto"
+    class="flex-col w-full pl-12 pt-12 sticky top-0 max-h-screen overflow-y-auto"
   >
     <div
-      class="flex items-center mb-6"
-      v-for="section in sections"
-      :key="section"
+      class="flex items-center"
+      v-for="(section, i) in sections"
+      :key="section.name"
     >
-      <div class="w-4 h-4 rounded-full border-4 mr-2 border-[#989898]"></div>
+      <!-- <div class="w-4 h-4 rounded-full border-4 mr-2 border-[#989898]"></div> -->
       <a
-        :href="`#${slugify(section)}`"
-        class="block w-full font-normal text-sm hover:text-[#647FFF] cursor-pointer"
+        v-if="section.kind === 'h1' || section.kind === 'h2'"
+        :href="`#${'anchor-' + slugify(section.name)}`"
+        class="block w-full font-semibold text-base hover:text-[#647FFF] cursor-pointer"
+        :class="[i === 0 ? '' : 'mt-4']"
       >
-        {{ section }}
+        {{ section.name }}
+      </a>
+
+      <a
+        v-if="section.kind === 'h3'"
+        :href="`#${'anchor-' + slugify(section.name)}`"
+        class="block w-full font-normal text-sm ml-3 hover:text-[#647FFF] cursor-pointer"
+      >
+        {{ section.name }}
+      </a>
+
+      <a
+        v-if="
+          section.kind === 'h4' ||
+          section.kind === 'h5' ||
+          section.kind === 'h6'
+        "
+        :href="`#${'anchor-' + slugify(section.name)}`"
+        class="block w-full font-normal text-xs ml-5 hover:text-[#647FFF] cursor-pointer"
+      >
+        {{ section.name }}
       </a>
     </div>
-    <div class="flex items-center">
+    <div class="flex items-center mt-4">
       <img class="mr-4" src="../assets/finish.svg" alt="End of the guide" />
       <p class="font-medium">Finish!</p>
     </div>
@@ -23,8 +45,11 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from "vue";
+import { TableOfContentsPart } from "../types";
+
 defineProps<{
-  sections: string[];
+  sections: TableOfContentsPart[];
 }>();
 
 const slugify = (str: string) => {
