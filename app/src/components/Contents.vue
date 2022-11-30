@@ -10,7 +10,7 @@
       <!-- <div class="w-4 h-4 rounded-full border-4 mr-2 border-[#989898]"></div> -->
       <a
         v-if="section.kind === 'h1' || section.kind === 'h2'"
-        :href="`#${'anchor-' + slugify(section.name)}`"
+        :href="`#${slugify(section.name)}`"
         class="block w-full font-semibold text-base hover:text-[#647FFF] cursor-pointer"
         :class="[i === 0 ? '' : 'mt-4']"
       >
@@ -19,7 +19,7 @@
 
       <a
         v-if="section.kind === 'h3'"
-        :href="`#${'anchor-' + slugify(section.name)}`"
+        :href="`#${slugify(section.name)}`"
         class="block w-full font-normal text-sm ml-3 hover:text-[#647FFF] cursor-pointer"
       >
         {{ section.name }}
@@ -31,7 +31,7 @@
           section.kind === 'h5' ||
           section.kind === 'h6'
         "
-        :href="`#${'anchor-' + slugify(section.name)}`"
+        :href="`#${slugify(section.name)}`"
         class="block w-full font-normal text-xs ml-5 hover:text-[#647FFF] cursor-pointer"
       >
         {{ section.name }}

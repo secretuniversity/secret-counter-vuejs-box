@@ -21,10 +21,9 @@ onMounted(() => {
       const id = slugify(el.innerHTML.replace(/<span.*<\/span>/, ""));
 
       const anchor = document.createElement("span");
-      anchor.setAttribute("id", "anchor-" + id);
+      anchor.setAttribute("id", id);
       anchor.classList.add(...["absolute", "-top-[6rem]"]);
 
-      el.setAttribute("id", id);
       el.classList.add(...["relative"]);
       el.appendChild(anchor);
     });
