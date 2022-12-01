@@ -60,3 +60,5 @@ ports:
   - name: Secret Box App Preview
     port: 5173
     onOpen: open-preview
+  - name: Local Secret gRPC
+    port: 9091
