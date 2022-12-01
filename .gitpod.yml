@@ -17,10 +17,16 @@ github:
     addLabel: prebuilt-in-gitpod
 
 tasks:
-  - name: Secret Box developer environment
+  - name: LocalSecret
     init: |
       echo "Pull LocalSecret image v1.4.0"
       docker pull ghcr.io/scrtlabs/localsecret:v1.4.0
+    command: |
+      echo "LocalSecret environment ready"
+    openMode: split-right
+
+  - name: Secret Box developer environment
+    init: |
       echo "Install integration test dependencies"
       cd  tests
       npm install
@@ -35,13 +41,19 @@ tasks:
       rustup install nightly
       rustup target add wasm32-unknown-unknown --toolchain nightly
       rustup default nightly
+    openMode: split-right
+
+  - name: Secret Box Frontend
+    command: |
+      cd app
       echo "Setup Vite Environment variable"
       #
-      # Need to unset so that Vite re-reads the app/.env when it's changed
+      # Need to unset the VITE env vars so that the new values are read when app/.env is updated
       #
       unset VITE_SECRET_BOX_CODE
       unset VITE_SECRET_BOX_ADDRESS
       unset VITE_SECRET_BOX_HASH
+    openMode: split-right
 
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
 ports:
