@@ -25,7 +25,7 @@ tasks:
       echo "LocalSecret environment ready"
     openMode: split-right
 
-  - name: Secret Box developer environment
+  - name: Secret Box Workspace
     init: |
       echo "Install integration test dependencies"
       cd  tests

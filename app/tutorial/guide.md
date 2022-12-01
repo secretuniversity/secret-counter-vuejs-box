@@ -28,8 +28,8 @@ At this point you've setup your _Secret Counter Box_ workspace including:
 At this point, you should have the following three terminal windows open in your local environment:
 
 1. `LocalSecret` - the first terminal shows the blockchain starting up and producing blocks
-2. `Secret Box workspace` - the 2nd terminal is where your contract gets compiled, deployed, and is the window you'll use to enter commands as you go through this tutorial
-3. `Simple Secret Counter` - the 3rd terminal is where your application server is launched, after the local network is running and the _Secret Counter_ contract has been created
+2. `Secret Box Workspace` - the 2nd terminal is where your contract gets compiled, deployed, and is the window you'll use to enter commands as you go through this tutorial
+3. `Secret Box Frontend` - the 3rd terminal is where your application server is launched, after the local network is running and the _Secret Counter_ contract has been created
 
 ## Contract Architecture
 
@@ -89,7 +89,7 @@ pub enum QueryMsg {
 
 **Exercise**
 
-From the `Secret Box` workspace terminal, try querying the counter value by sending the `GetCount` message to your contract.
+From the `Secret Box Workspace` terminal, try querying the counter value by sending the `GetCount` message to your contract.
 
 > While the message variants are defined in the _Secret Counter_ countract using camel-casing, all messages are actually sent in JSON
 with the message name in snake-cased.
@@ -135,7 +135,7 @@ reset { "count": 56 } # Or any i32 value
 
 ## Setting Up Your Secret Counter
 
-In the `Secret Box workspace` terminal, you should see the output of the tasks that store and create your contract.
+In the `Secret Box Workspace` terminal, you should see the output of the tasks that store and create your contract.
 
 ![](https://i.imgur.com/dQdv3s4.png)
 
@@ -183,7 +183,7 @@ SECRET_BOX_HASH=0xa92402fd34057f79f7af6101d25d20c05b960ed88c82932657d87889f046d2
 
 Let's try to re-upload and instantiate the _Secret Counter_ contract.
 
-In the `Secret Box workspace` terminal, run the command:
+In the `Secret Box Workspace` terminal, run the command:
 
 ```bash
 ./scripts/create_secret_box.sh
@@ -341,7 +341,7 @@ Substitute the code in `query_count()` for this:
    Ok(CountResponse { count: state.count })
 ```
 
-Finally, use the `Secret Box workspace` terminal window to compile your contract changes:
+Finally, use the `Secret Box Workspace` terminal window to compile your contract changes:
 
 ```bash
 make build
@@ -415,7 +415,7 @@ to:
 assert_eq!(1000, value.count);
 ```
 
-Finally, back in your `Secret Box workspace` terminal, run your unit tests with:
+Finally, back in your `Secret Box Workspace` terminal, run your unit tests with:
 
 ```bash
 make test
@@ -655,13 +655,13 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 Now that you've got all of your contract's functionality implemented, and the unit tests are passing, it's time to re-compile and
 deploy the revised version of your _Secret Counter_ contract.
 
-Use the `Secret Box workspace` terminal to run the following command:
+Use the `Secret Box Workspace` terminal to run the following command:
 
 ```bash
 ./scripts/create_secret_box.sh
 ```
 > The `create_secretbox.sh` script compiles the contract, uploads it to `LocalSecret` and then saves the contract ID, hash and address to 
-`.env` files to be used in your `Secret Box workspace` terminal, the integration tests, and the `Simple Secret Counter` frontend.
+`.env` files to be used in your `Secret Box Workspace` terminal, the integration tests, and the `Simple Secret Counter` frontend.
 
 ## Running the Integration Tests
 
@@ -675,7 +675,7 @@ contract.
 
 **Exercise**
 
-In the `Secret Box workspace` terminal window, run these commands:
+In the `Secret Box Workspace` terminal window, run these commands:
 
 ```bash
 cd tests

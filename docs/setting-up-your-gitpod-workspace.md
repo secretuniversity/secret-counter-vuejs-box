@@ -14,7 +14,7 @@ You'll see the local blockchain startup and then messages indicating blocks are 
 
 ![](/docs/localsecret-launched.png)
 
-Then, in the 2nd terminal window, "Secret Box Developer Environment," compile, run unit tests, deploy and create your `secret counter` contract:
+Then, in the 2nd terminal window, "Secret Box Workspace," compile, run unit tests, deploy and create your `secret counter` contract:
 
 ```
 make build && make test
