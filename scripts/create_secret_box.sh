@@ -215,8 +215,8 @@ function unix_time_of_tx() {
     date -d "$(jq -r '.timestamp' <<<"$tx")" '+%s'
 }
 
-SECRET_BOX_CODE_ID==''
-SECRET_BOX_ADDRESS==''
+SECRET_BOX_CODE_ID=''
+SECRET_BOX_ADDRESS=''
 SECRET_BOX_CODE_HASH=''
 
 function main() {
