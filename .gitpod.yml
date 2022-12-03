@@ -19,9 +19,11 @@ github:
 tasks:
   - name: LocalSecret
     init: |
-      echo "Pull LocalSecret image v1.4.0"
-      docker pull ghcr.io/scrtlabs/localsecret:v1.4.0
+      echo "Pull LocalSecret docker image"
+      docker pull ghcr.io/scrtlabs/localsecret
     command: |
+      unset LOCALSECRET_GRPC
+      unset VITE_LOCALSECRET_GRPC
       echo "LocalSecret environment ready"
     openMode: split-right
 
@@ -31,36 +33,88 @@ tasks:
       cd  tests
       npm install
       npm install -D ts-node
-      echo "Install Vue"
-      yarn global add @vue/cli
-      echo "Install frontend dependencies"
-      cd ../app
-      yarn install 
     command: |
       echo "Setup Rust toolchain"
       rustup install nightly
       rustup target add wasm32-unknown-unknown --toolchain nightly
       rustup default nightly
+      echo "Wait for LocalSecret RPC"
+      gp ports await 26657
+      scripts/localsecret_healthcheck.sh
+      echo "Wait for LocalSecret gRPC-Web"
+      gp ports await 9091
+      unset LOCALSECRET_GRPC
+      unset VITE_LOCALSECRET_GRPC
+      e="LOCALSECRET_GRPC=$(gp url 9091)"
+      eval $(gp env -e $e)
+      echo "Ready to build, test, deploy and instantiate secret contract to local blockchain"
     openMode: split-right
 
   - name: Secret Box Frontend
+    init: |
+      echo "Install Vue"
+      yarn global add @vue/cli
+      echo "Install frontend dependencies"
+      cd add
+      yarn install
     command: |
       cd app
       echo "Setup Vite Environment variable"
       #
       # Need to unset the VITE env vars so that the new values are read when app/.env is updated
       #
+       echo "Wait for LocalSecret gRPC-Web"
+      gp ports await 9091
+      echo "Setup Vite Environment variables"
+      unset LOCALSECRET_GRPC
+      e="LOCALSECRET_GRPC=$(gp url 9091)"
+      eval $(gp env -e $e)
       unset VITE_SECRET_BOX_CODE
       unset VITE_SECRET_BOX_ADDRESS
       unset VITE_SECRET_BOX_HASH
+      unset VITE_LOCALSECRET_GRPC
     openMode: split-right
 
+vscode:
+  extensions:
+    - rust-lang.rust
+    - serayuzgur.crates
+    - bungcip.better-toml
+
+jetbrains:
+  intellij:
+    plugins:
+      - io.digiline.secretideplugin
+      - org.rust.lang
+      - org.toml.lang
+
 # List the ports to expose. Learn more https://www.gitpod.io/docs/config-ports/
+
 ports:
+  - name: LocalSecret RPC
+    port: 26657
+    onOpen: ignore
+    visibility: public
+  - name: LocalSecret gRPC-Web
+    port: 9090-9091
+    onOpen: ignore
+    visibility: public
+  - name: Secret Faucet
+    port: 5000
+    onOpen: ignore
+    visibility: public
+  - name: LocalSecret LCD
+    port: 1317
+    onOpen: ignore
+    visibility: public
+  - port: 3000
+    onOpen: ignore
+  - port: 24000
+    onOpen: ignore
+  - port: 6060
+    onOpen: ignore
+  - port: 1316
+    onOpen: ignore
   - name: Secret Box App Preview
     port: 5173
     onOpen: open-preview
-  - name: Local Secret gRPC
-    port: 9091
-  - name: Local Faucet
-    port: 5000

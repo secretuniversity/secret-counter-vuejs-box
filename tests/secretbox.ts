@@ -15,15 +15,18 @@ const wallet = new Wallet(
 const secretBoxCode: string = process.env.SECRET_BOX_CODE!;
 const secretBoxHash: string = process.env.SECRET_BOX_HASH!;
 const secretBoxAddress: string = process.env.SECRET_BOX_ADDRESS!;
+const localSecretUrl: string = process.env.LOCALSECRET_GRPC!;
 
 console.log(`code id = ${secretBoxCode}`);
 console.log(`contract hash = ${secretBoxHash}`);
 console.log(`contract address = ${secretBoxAddress}`);
+console.log(`localsecret gRPC = ${localSecretUrl}`);
 
 const initialize = async () => {
   // To create a signer secret.js client, also pass in a wallet
   const secretjs = await SecretNetworkClient.create({
-    grpcWebUrl: "http://localhost:9091",
+    //grpcWebUrl: "http://localhost:9091",
+    grpcWebUrl: localSecretUrl,
     chainId: "secretdev-1",
     wallet: wallet,
     walletAddress: wallet.address,
