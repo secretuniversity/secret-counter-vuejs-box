@@ -228,6 +228,9 @@ function main() {
     log '              <####> Create Secret Box contract <####>'
     log "secretcli version in the docker image is: $(secretcli version)\n"
 
+    localsecret_grpc=$LOCALSECRET_GRPC
+    log -e "LocalSecret gRPC: $localsecret_grpc\n"
+
     local init_msg
     init_msg='{"count": 16876}'
     code_id="$(upload_contract '.')"
