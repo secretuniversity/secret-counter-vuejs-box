@@ -55,7 +55,7 @@ tasks:
       echo "Install Vue"
       yarn global add @vue/cli
       echo "Install frontend dependencies"
-      cd add
+      cd app
       yarn install
     command: |
       cd app
