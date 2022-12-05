@@ -21,67 +21,49 @@ tasks:
     init: |
       echo "Pull LocalSecret docker image"
       docker pull ghcr.io/scrtlabs/localsecret
-      echo "Pull contract optimizer image"
-      docker pull enigmampc/secret-contract-optimizer:1.0.9
     command: |
-      echo "Starting localsecret blockchain"
-      make localsecret
+      unset LOCALSECRET_GRPC
+      unset VITE_LOCALSECRET_GRPC
+      echo "LocalSecret environment ready"
     openMode: split-right
 
   - name: Secret Box Workspace
     init: |
-      echo "Setup Rust toolchain for pre-build"
-      rustup install nightly
-      rustup target add wasm32-unknown-unknown --toolchain nightly
-      rustup default nightly
-      echo "Compile secret box contract"
-      make build
-      echo "Build schema files"
-      make schema
-      echo "Run unit tests"
-      make  test
       echo "Install integration test dependencies"
       cd  tests
       npm install
       npm install -D ts-node
     command: |
-      echo "Setup Rust toolchain for developer environment"
+      echo "Setup Rust toolchain"
       rustup install nightly
       rustup target add wasm32-unknown-unknown --toolchain nightly
       rustup default nightly
       echo "Wait for LocalSecret RPC"
       gp ports await 26657
       scripts/localsecret_healthcheck.sh
-      echo "Deploy and instantiate secret contract to local blockchain"
-      gp ports await 26657
       echo "Wait for LocalSecret gRPC-Web"
       gp ports await 9091
       unset LOCALSECRET_GRPC
       unset VITE_LOCALSECRET_GRPC
       e="LOCALSECRET_GRPC=$(gp url 9091)"
       eval $(gp env -e $e)
-      echo "Deploy and instantiate secret contract to local blockchain"
-      SECRET_ENV=`scripts/create_secret_box.sh`
-      for e in $SECRET_ENV; do eval $(gp env -e $e); done
-      gp sync-done secretbox-contract
+      echo "Ready to build, test, deploy and instantiate secret contract to local blockchain"
     openMode: split-right
 
   - name: Secret Box Frontend
     init: |
-      echo "Install yarn"
-      sudo npm install --global yarn
       echo "Install Vue"
       yarn global add @vue/cli
       echo "Install frontend dependencies"
       cd app
       yarn install
     command: |
-      gp sync-await secretbox-contract
       cd app
+      echo "Setup Vite Environment variable"
       #
       # Need to unset the VITE env vars so that the new values are read when app/.env is updated
       #
-      echo "Wait for LocalSecret gRPC-Web"
+       echo "Wait for LocalSecret gRPC-Web"
       gp ports await 9091
       echo "Setup Vite Environment variables"
       unset LOCALSECRET_GRPC
@@ -91,7 +73,6 @@ tasks:
       unset VITE_SECRET_BOX_ADDRESS
       unset VITE_SECRET_BOX_HASH
       unset VITE_LOCALSECRET_GRPC
-      yarn dev
     openMode: split-right
 
 vscode:
