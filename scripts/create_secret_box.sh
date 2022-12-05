@@ -6,7 +6,7 @@
 # to interact with the running LocalSecret instance to deploy a secret contract.
 #
 
-set -eu
+set -e
 set -o pipefail # If anything in a pipeline fails, the pipe's exit status is a failure
 #set -x # Print all commands for debugging
 
@@ -217,7 +217,7 @@ function unix_time_of_tx() {
 
 SECRET_BOX_CODE_ID=''
 SECRET_BOX_ADDRESS=''
-SECRET_BOX_CODE_HAS=''
+SECRET_BOX_CODE_HASH=''
 
 if [ "$LOCALSECRET_GRPC" == "" ]
 then
