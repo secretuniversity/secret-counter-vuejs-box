@@ -1,6 +1,6 @@
 ## Secret Counter Box
 
-_(Brought to you by [Secret University](https;//scrt.university))_
+_(Brought to you by [Secret University](https://scrt.university))_
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box)
 
