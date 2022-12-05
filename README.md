@@ -27,8 +27,9 @@ fully-implemented contract and application code are under the `app/tutorial/solu
 
 ## Getting Started
 
-To get started with this `Secret Box` you can either open it in the Gitpod developer sandbox, or setup your local environment. The Gitpod workspace will save you time, as
-a lot of the heavy lifting, such as pulling the `LocalSecret` docker image and installation of `Rust` and `cargo`, are completed for you in a pre-build task. 
+To get started with this `Secret Box` you can either open it in Gitpod, or setup your local environment. The Gitpod workspace will save you time, as a lot of the heavy lifting, such as pulling the `LocalSecret` docker image, installing `Rust`, `cargo` and other tools, and deploying the secret contract are completed for you in a pre-build task. 
+
+Gitpod also starts the `LocalSecret` blockchain and launches the frontend using _Vite_.
 
 Once you're environment is ready to go, use this [guide](/app/tutorial/guide.md) to view the tutorial and complete the Secret Box code!
 
@@ -39,11 +40,10 @@ Use the "Open in Gitpod" button below to launch the `Secret Counter Box`.
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box)
 
-Then, follow this [Setting Up Your Gitpod Workspace](/docs/setting-up-your-gitpod-workspace.md) guide to complete your setup.
 
 ### Local Environment Setup
 
-If you prefer to get started with this Secret Box locally, use the [Setting Up Your Environment](/docs/setting-up-your-environment.md) guide to install the required infrastructure. The guide will also walk you through launching the `LocalSecret` blockchain, building, testing and deploying the `secret counter` contract.
+If you prefer to get started with this Secret Box locally, use the [Setting Up Your Environment](/docs/setting-up-your-environment.md) guide to install the required infrastructure. The guide will also walk you through launching the `LocalSecret` blockchain, building, testing and deploying the `secret counter` contract. And lastly, launching the frontend.
 
 ## Commands & Usage
 
@@ -106,12 +106,12 @@ http://localhost:1317/openapi/ to view the queries, transactions and parameters 
 When using the Gitpod workspace, prepend the port number to the Gitpod URL. 
 
 For example, if the workspace is at
-`https://secretunive-secretboxvi-zyc1kppqbvk.ws-us69.gitpod.io`, then you can connect to the LCD service at
-`https://1317-secretunive-secretboxvi-zyc1kppqbvk.ws-us69.gitpod.io`.
+`https://secretunive-secretcount-2qzt9b9me7a.ws-us77.gitpod.io`, then you can connect to the LCD service at
+`https://1317-secretunive-secretcount-2qzt9b9me7a.ws-us77.gitpod.io`.
 
 To use the Swagger or OpenAPI interaces append `/swagger/` or `/openapi/` to the Gitpod URL:
 
-`https://1317-secretunive-secretboxvi-zyc1kppqbvk.ws-us69.gitpod.io/swagger/`
+`https://1317-secretunive-secretcount-2qzt9b9me7a.ws-us77.gitpod.io/swagger/`
 
 ![](docs/swagger-interface.png)
 
