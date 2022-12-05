@@ -1,15 +1,14 @@
 # Secret Counter Box Tutorial
 
 ## Introduction
-This box is an introductory or beginner-level quickstart based on the [counter template contract](https://github.com/secretuniversity/secret-template-cw1).
+This box is an introductory or beginner-level quickstart based on the [counter template contract](https://github.com/secretuniversity/secret-template-cw1). If you would like to work with this Secret Box your local environment, follow the "Getting Started" steps [here](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/README.md).
 
-
-_Secret Counter_ is a contract that illustrates how to handle basic query and state changes (e.g. transExercises) on the Secret Network.
+_Secret Counter_ is a contract that illustrates how to handle basic query and state changes (e.g. transactions) on the Secret Network.
 
 > You can think of a secret contract as smart, but in addition provides programmable privacy--meaning you decide what input, output and state data
 is public or private, depending on your use case or scenario.
 
-In the next sections, we'll take a look at the overall architecture and design of our smart contract, setup your local development environment, go through the creation of your contract, and then you'll get a chance to modify your contract and application code to:
+In the next sections, we'll take a look at the overall architecture and design of our smart contract, go through the creation of your contract, and then you'll get a chance to modify your contract and application code to:
 
 - query the contract's counter value
 - increment the counter's value
@@ -17,19 +16,17 @@ In the next sections, we'll take a look at the overall architecture and design o
 
 > While the frontend allows you to reset and click the '+' button to increment the counter, the contract's state is unchanged because we haven't "wired" the frontend to the backend contract yet.
 
-If you haven't already launched this box in a Gitpod workspace, or setup your local environment, follow the "Getting Started" steps [here](https://github.com/secretuniversity/secret-counter-vuejs-box/blob/main/README.md).
+At this point your _Secret Counter Box_ workspace should be setup and includes: 
 
-At this point you've setup your _Secret Counter Box_ workspace including: 
-* the developer environment
-* started a `LocalSecret` blockchain instance
-* created and deployed your smart contract to `LocalSecret`
-* and finally, starting the VueJS web application: _Simple Secret Counter_.
+* a running `LocalSecret` blockchain instance
+* an initial version of the _Secret Counter_ contract has been uploaded to `LocalSecret`
+* and _Simple Secret Counter_ has been launched, which includes this tutorial
 
-At this point, you should have the following three terminal windows open in your local environment:
+You should have the following three terminal windows open in your local environment:
 
 1. `LocalSecret` - the first terminal shows the blockchain starting up and producing blocks
 2. `Secret Box Workspace` - the 2nd terminal is where your contract gets compiled, deployed, and is the window you'll use to enter commands as you go through this tutorial
-3. `Secret Box Frontend` - the 3rd terminal is where your application server is launched, after the local network is running and the _Secret Counter_ contract has been created
+3. `Secret Box Frontend` - the 3rd terminal is where your application server is launched, after `LocalSecret` is running and the _Secret Counter_ contract has been created
 
 ## Contract Architecture
 
@@ -137,7 +134,7 @@ reset { "count": 56 } # Or any i32 value
 
 In the `Secret Box Workspace` terminal, you should see the output of the tasks that store and create your contract.
 
-![](https://i.imgur.com/dQdv3s4.png)
+![](https://i.imgur.com/hQ1Bgg2.png)
 
 
 > If you've done any object-oriented programming, the idea of instantiating an object from a class definition will be familiar to you.
@@ -683,7 +680,7 @@ npx ts-node secretbox.ts
 ```
 > As the test is running you'll start to see the activity in the `LocalSecret` terminal, as the integration tests.
 
-![](https://i.imgur.com/QV98fpR.png)
+![](https://i.imgur.com/MYhruE5.png)
 
 The `secretbox.ts` perform these steps in order:
 
@@ -739,6 +736,7 @@ Now, let's modify the [SecretBox.vue]() component so that it:
 > VITE_SECRET_BOX_CODE=1
 > VITE_SECRET_BOX_ADDRESS=secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg
 > VITE_SECRET_BOX_HASH=0xa92402fd34057f79f7af6101d25d20c05b960ed88c82932657d87889f046d2d2
+> VITE_LOCALSECRET_GRPC=https://9091-secretunive-secretcount-j7shljm3sni.ws-us77.gitpod.io
 > ```
 
 **Exercise**
@@ -765,10 +763,12 @@ const wallet = new Wallet(
 )
 
 // Get environment variables from .env
+const localSecretUrl = import.meta.env.VITE_LOCALSECRET_GRPC
 const secretBoxCode = import.meta.env.VITE_SECRET_BOX_CODE
 const secretBoxHash = import.meta.env.VITE_SECRET_BOX_HASH
 const secretBoxAddress = import.meta.env.VITE_SECRET_BOX_ADDRESS
 
+console.log(`local gRPC = ${localSecretUrl}`)
 console.log(`code id = ${secretBoxCode}`)
 console.log(`contract hash = ${secretBoxHash}`)
 console.log(`contract address = ${secretBoxAddress}`)
@@ -777,7 +777,7 @@ console.log(`contract address = ${secretBoxAddress}`)
 
 If you open the browser Dev Tools window (Ctrl+Shift+I), you should see the console log messages from above. 
 
-![](https://i.imgur.com/2bh05in.png)
+![](https://i.imgur.com/bUSD7p3.png)
 
 ### Connect to LocalSecret
 
@@ -799,10 +799,11 @@ to:
 onMounted(async () => {
   window.addEventListener('scroll', handleScroll)
 
-   // To create a signer secret.js client, also pass in a wallet
-   console.log("Initializing Secret.js client ...")
+  // To create a signer secret.js client, also pass in a wallet
+  console.log("Initializing Secret.js client ...")
   secretjs = await SecretNetworkClient.create({
-    grpcWebUrl: "http://localhost:9091",
+    //grpcWebUrl: "http://localhost:9091",
+    grpcWebUrl: localSecretUrl,
     chainId: "secretdev-1",
     wallet: wallet,
     walletAddress: wallet.address,
@@ -816,6 +817,8 @@ onMounted(async () => {
 
 In the code above, we're creating a client for `localsecret` using the wallet we setup. Once the DApp has connected to the network, you're ready
 to start making queries and sending transExercises to the _Secret Counter_ contract.
+
+> We're using the cloud-based Gitpod URL in the workspace, to talk to the `LocalSecret` blockchain, which runs on port 9091. If you're working with this _Secret Box_ in a local developer environment, change that to the line above `grpcWebUrl: "http://localhost:9091` instead.
 
 ### Query the Counter Value
 

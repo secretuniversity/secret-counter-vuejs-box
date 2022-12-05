@@ -80,6 +80,8 @@ vscode:
     - rust-lang.rust
     - serayuzgur.crates
     - bungcip.better-toml
+    - Vue.volar
+    - rust-lang.rust-analyzer
 
 jetbrains:
   intellij:
