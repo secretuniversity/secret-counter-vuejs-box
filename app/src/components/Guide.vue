@@ -90,6 +90,10 @@ defineComponent({
   @apply list-disc pl-8 my-4;
 }
 
+#guide ol {
+  @apply list-decimal pl-8 my-4;
+}
+
 #guide pre {
   @apply border border-[#E0E0E0] rounded-md mb-4 py-4 px-6;
 }
