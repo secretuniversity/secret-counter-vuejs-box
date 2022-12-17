@@ -32,8 +32,8 @@ You should have the following three terminal windows open in your local environm
 
 The design of our _Secret Counter_ contract accounts for two possible users: 
 
-- The contract owner (you) who instantiates the contract 
-- The general user of our contract who can query, increment, and reset the counter.
+- The contract owner (you) who instantiates the contract, and has the ability to reset the counter.
+- The general user of our contract who can query and increment the counter.
 
 ![](https://i.imgur.com/z3R428U.png)
 
@@ -51,9 +51,9 @@ A Secret contract, which is based on [CosmWasm](https://docs.cosmwasm.com) smart
 
 - `instantiate()` - receives the `InstantiateMsg` and saves the initial value of the counter to the contract state. The instantiation of a CosmWasm smart contract is performed by the contract owner.
 
-- `execute()` - handles transExercise which mutate or change the state of the contract. In our case, the `Increment` and `Reset` messages are handled here to update the counter's value.
+- `execute()` - handles transactions which mutate or change the state of the contract. In our case, the `Increment` and `Reset` messages are handled here to update the counter's value.
 
-- `query()` - handles messages which do **not** change the state of the contract. To recieve the counter's state we'll utilize the `QueryCount` message.
+- `query()` - handles messages which do **not** change the state of the contract. To get the counter's value we'll utilize the `QueryCount` message.
 
 A good place to start when developing secret contracts is to design the messages, defined in the [msg.rs](), that will be handled by your contract's entry points.
 
