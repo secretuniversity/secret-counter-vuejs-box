@@ -103,12 +103,12 @@ fn query_count(
     //
 
     // 1. load state
-   let state = config_read(deps.storage).load()?;
+    let state = config_read(deps.storage).load()?;
 
-   deps.api.debug("count queried successfully");
+    deps.api.debug("count queried successfully");
 
-   // 2. return count response
-   Ok(CountResponse { count: state.count })
+    // 2. return count response
+    Ok(CountResponse { count: state.count })
 }
 
 #[cfg(test)]

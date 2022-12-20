@@ -312,13 +312,11 @@ Next, we need to implement the `query_count()` method so that it returns a respo
 fn query_count(
     deps: Deps,
 ) -> StdResult<CountResponse> {
-   // 1. load state
-   let state = config_read(deps.storage).load()?;
 
-   deps.api.debug("count incremented successfully");
+    // 1. load state
+    // 2. return count response
 
-   // 2. return count response
-   Ok(CountResponse { count: state.count })
+    Ok(CountResponse { count: 16876 })
 }
 ```
 
@@ -326,16 +324,20 @@ In order to return the count of our contract, we first need to load our contract
 
 **Exercise**
 
-Substitute the code in `query_count()` for this:
+Substitute the `query_count()` function definition with this:
 
 ```rust
-   // 1. load state
-   let state = config_read(deps.storage).load()?;
+fn query_count(
+    deps: Deps,
+) -> StdResult<CountResponse> {
+    // 1. load state
+    let state = config_read(deps.storage).load()?;
 
-   deps.api.debug("count incremented successfully");
+    deps.api.debug("count queried successfully");
 
-   // 2. return count response
-   Ok(CountResponse { count: state.count })
+    // 2. return count response
+    Ok(CountResponse { count: state.count })
+}
 ```
 
 Finally, use the `Secret Box Workspace` terminal window to compile your contract changes:
@@ -777,7 +779,7 @@ console.log(`contract address = ${secretBoxAddress}`)
 
 If you open the browser Dev Tools window (Ctrl+Shift+I), you should see the console log messages from above. 
 
-![](https://i.imgur.com/bUSD7p3.png)
+![](https://i.imgur.com/itJIBM8.png)
 
 ### Connect to LocalSecret
 
