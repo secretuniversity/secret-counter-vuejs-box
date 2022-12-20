@@ -107,7 +107,7 @@ The returned value is the `CountResponse` struct with the value of the counter.
 ```
 
 **Entry Point: Execute**
-To handle updating our counter's value we need to execute a transExercise and update our smart contract's state. The execute messages are defined as part of the `ExecuteMsg` enum:
+To handle updating our counter's value we need to execute a transaction and update our smart contract's state. The execute messages are defined as part of the `ExecuteMsg` enum:
 
 ```rust
 pub enum ExecuteMsg {
@@ -216,8 +216,8 @@ As you can see there are multiple parameters sent on the creation of a secret co
 - `deps: DepsMut` - contains references to your contract's `Storage`, an `Api` element that has functionality outside of the contract wasm such as the ability to
 validate, canonicalize (*binary*) and humanize (*string*) Secret Network addresses, and a `Querier` to do things like getting the balance of a wallet address.
 
-- `_env: Env` - this parameter, though unused as denoted by the `_` in front, has a `BlockInfo` element for getting the current block, `TransExerciseInfo` which has the index
-of the transExercise this `InstantiateMsg` was executed in, and `ContractInfo` which has the address of the instantiated contract.
+- `_env: Env` - this parameter, though unused as denoted by the `_` in front, has a `BlockInfo` element for getting the current block, `TransactionInfo` which has a record of the position of the 
+`InstantiateMsg` transaction in the current block, and `ContractInfo` which has the address of the instantiated contract.
 
 - `info` - `MessageInfo` contains the sender's address and any funds sent to the contract.
 
@@ -542,7 +542,7 @@ pub fn try_reset(
 ```
 
 When calling `update`, we're checking to make sure that the sender of the message is also the contract
-owner because in our design we've decided that the `reset` transExercise is something only the contract owner
+owner because in our design we've decided that the `reset` transaction is something only the contract owner
 should be able send.
 
 In the event that the caller of `reset` is *not* the contract owner, we return a `ContractError` enum variant stating the sender is unauthorized. 
@@ -664,7 +664,7 @@ Use the `Secret Box Workspace` terminal to run the following command:
 
 Now that you've got all of your contract's functionality implemented, and the unit tests are passing, it's time to
 run the integration tests. These tests are written using [TypeScript](https://www.typescriptlang.org/) and [Secret.js](https://secretjs.scrt.network/), which is the library that you'll use to 
-connect to `LocalSecret` and run your queries and transExercises.
+connect to `LocalSecret` and run your queries and transactions.
 
 > Writing integration tests is an important exercise as it involves having an external process interact with your contract. It's also helpful 
 when it comes time to develop the frontend of a DApp because it provides the examples of sending the query and execute messages to your 
@@ -718,7 +718,7 @@ Go ahead and try out the counter now, clicking the _+_ button, and then click on
 
 > You'll notice that the incrementing and resetting happens very quickly. After you've "wired" your frontend to the backend contract, it won't be
 > as quick because the `localsecret` blockchain has a block time of approximately 5-6s, which is how long it takes to get your `increment` and 
-> `reset` transExercises included in the next block that's committed to the network.
+> `reset` transactions included in the next block that's committed to the network.
 
 ![](https://i.imgur.com/SDjq1Hv.png)
 
@@ -816,7 +816,7 @@ onMounted(async () => {
 ```
 
 In the code above, we're creating a client for `localsecret` using the wallet we setup. Once the DApp has connected to the network, you're ready
-to start making queries and sending transExercises to the _Secret Counter_ contract.
+to start making queries and sending transactions to the _Secret Counter_ contract.
 
 > We're using the cloud-based Gitpod URL in the workspace, to talk to the `LocalSecret` blockchain, which runs on port 9091. If you're working with this _Secret Box_ in a local developer environment, change that to the line above `grpcWebUrl: "http://localhost:9091` instead.
 
@@ -880,7 +880,7 @@ and back in the _Simple Counter_ frontend, you'll see it's picking up the actual
 ### Increment the Counter
 
 If you click the _+_ button to increment the counter, you'll notice that the counter is incremented, but if you reload the page, the counter value
-that's displayed is still `16876`. That's because we haven't modified the `increment()` function to send the transExercise to `LocalSecret`. The counter 
+that's displayed is still `16876`. That's because we haven't modified the `increment()` function to send the transaction to `LocalSecret`. The counter 
 value stored in the contract's state has not been changed yet.
 
 **Exercise**
@@ -915,15 +915,15 @@ const incrementCounter = async () => {
 }
 ```
 
-In the code above, we send a transExercise that updates the contract's state by calling `secretjs.tx.compute.executeContract()`, supplying:
+In the code above, we send a transaction that updates the contract's state by calling `secretjs.tx.compute.executeContract()`, supplying:
 
 - sender's wallet address
 - contract address
 - contract hash
 - the `Increment` message
-- the gas limit for our transExercise sets a "meter" to limit the amount of gas paid for in fees
+- the gas limit for our transaction sets a "meter" to limit the amount of gas paid for in fees
 
-After the `increment` transExercise is executed in a block, we do another `queryCounter()` call to get the changed value.
+After the `increment` transaction is executed in a block, we do another `queryCounter()` call to get the changed value.
 
 **Exercise**
 
