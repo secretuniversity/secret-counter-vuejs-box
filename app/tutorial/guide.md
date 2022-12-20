@@ -34,8 +34,11 @@ The design of our _Secret Counter_ contract accounts for two possible users:
 
 - The contract owner (you) who instantiates the contract, and has the ability to reset the counter.
 - The general user of our contract who can query and increment the counter.
+<br/>
 
-![](https://i.imgur.com/z3R428U.png)
+![](https://i.imgur.com/vOL4e5t.png)
+
+<br/>
 
 ### Project Structure
 
