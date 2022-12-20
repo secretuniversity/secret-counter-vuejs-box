@@ -681,6 +681,7 @@ In the `Secret Box Workspace` terminal window, run these commands:
 
 ```bash
 cd tests
+source .env
 npx ts-node secretbox.ts
 ```
 > As the test is running you'll start to see the activity in the `LocalSecret` terminal, as the integration tests.
