@@ -98,7 +98,7 @@ Below we're using the CLI (command-line interface) to interact with the contract
 container that our `LocalSecret` is running in. 
 
 ```bash
-docker exec localsecret secretd query compute query $VITE_SECRET_BOX_ADDRESS '{"get_count": {}}' | jq
+docker exec localsecret secretd query compute query $SECRET_BOX_ADDRESS '{"get_count": {}}' | jq
 ```
 
 The returned value is the `CountResponse` struct with the value of the counter.
