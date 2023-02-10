@@ -44,6 +44,7 @@ tasks:
       cd  tests
       npm install
       npm install -D ts-node
+      cd $GITPOD_REPO_ROOT
     command: |
       echo "Setup Rust toolchain for developer environment"
       rustup install nightly
@@ -75,6 +76,7 @@ tasks:
       echo "Install frontend dependencies"
       cd app
       yarn install
+      cd $GITPOD_REPO_ROOT
     command: |
       gp sync-await secretbox-contract
       cd app

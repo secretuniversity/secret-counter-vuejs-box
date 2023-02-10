@@ -33,6 +33,7 @@ tasks:
       cd  tests
       npm install
       npm install -D ts-node
+      cd $GITPOD_REPO_ROOT
     command: |
       echo "Setup Rust toolchain"
       rustup install nightly
@@ -57,6 +58,7 @@ tasks:
       echo "Install frontend dependencies"
       cd app
       yarn install
+      cd $GITPOD_REPO_ROOT
     command: |
       cd app
       echo "Setup Vite Environment variable"
