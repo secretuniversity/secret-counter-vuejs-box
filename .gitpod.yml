@@ -31,6 +31,7 @@ tasks:
   - name: Secret Box Workspace
     init: |
       echo "Setup Rust toolchain for pre-build"
+      rustup uinstall stable
       rustup install stable
       rustup target add wasm32-unknown-unknown --toolchain stable
       rustup default stable
@@ -47,6 +48,7 @@ tasks:
       cd $GITPOD_REPO_ROOT
     command: |
       echo "Setup Rust toolchain for developer environment"
+      rustup uinstall stable
       rustup install stable
       rustup target add wasm32-unknown-unknown --toolchain stable
       rustup default stable
