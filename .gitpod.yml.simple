@@ -20,7 +20,7 @@ tasks:
   - name: LocalSecret
     init: |
       echo "Pull LocalSecret docker image"
-      docker pull ghcr.io/scrtlabs/localsecret
+      docker pull ghcr.io/scrtlabs/localsecret:v1.6.0
     command: |
       unset LOCALSECRET_GRPC
       unset VITE_LOCALSECRET_GRPC
@@ -36,9 +36,10 @@ tasks:
       cd $GITPOD_REPO_ROOT
     command: |
       echo "Setup Rust toolchain"
-      rustup install nightly
-      rustup target add wasm32-unknown-unknown --toolchain nightly
-      rustup default nightly
+      rustup uninstall stable
+      rustup install stable
+      rustup target add wasm32-unknown-unknown --toolchain stable
+      rustup default stable
       echo "Wait for LocalSecret RPC"
       gp ports await 26657
       scripts/localsecret_healthcheck.sh
