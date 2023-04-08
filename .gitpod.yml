@@ -20,7 +20,7 @@ tasks:
   - name: LocalSecret
     init: |
       echo "Pull LocalSecret docker image"
-      docker pull ghcr.io/scrtlabs/localsecret:v1.8.0
+      docker pull ghcr.io/scrtlabs/localsecret:v1.6.0
       echo "Pull contract optimizer image"
       docker pull enigmampc/secret-contract-optimizer:1.0.9
     command: |
