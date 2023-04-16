@@ -107,7 +107,7 @@ SecretCLI is a command-line tool that helps us interact with the Secret Network 
 ##### Linux
 
 ```bash
-wget -O secretcli https://github.com/scrtlabs/SecretNetwork/releases/download/v1.5.0/secretcli-Linux
+wget -O secretcli https://github.com/scrtlabs/SecretNetwork/releases/latest/download/secretcli-Linux
 chmod +x secretcli
 sudo mv secretcli /usr/local/bin/secretcli
 ```
@@ -115,14 +115,14 @@ sudo mv secretcli /usr/local/bin/secretcli
 ##### PowerShell
 
 ```powershell
-wget -O secretcli.exe https://github.com/scrtlabs/SecretNetwork/releases/download/v1.5.0/secretcli-Windows
+wget -O secretcli.exe https://github.com/scrtlabs/SecretNetwork/releases/download/latest/secretcli-Windows
 ```
 
 > You'll need to add `secretcli.exe` to the PATH environment variable
 
 ##### MacOS (Intel)
 
-Download `secretcli` for your system [here](https://github.com/scrtlabs/SecretNetwork/releases/download/v1.5.0/secretcli-macOS)
+Download `secretcli` for your system [here](https://github.com/scrtlabs/SecretNetwork/releases/download/latest/secretcli-macOS)
 
 Set the file name to `secretcli` and set it as executable
 
@@ -133,7 +133,7 @@ chmod 755 secretcli
 
 ##### MacOS (M1)
 
-Download `secretcli` for your system [here](https://github.com/scrtlabs/SecretNetwork/releases/download/v1.5.0/secretcli-MacOS-arm64)
+Download `secretcli` for your system [here](https://github.com/scrtlabs/SecretNetwork/releases/download/latest/secretcli-MacOS-arm64)
 
 Set the file name to `secretcli` and set it as executable
 
@@ -190,7 +190,7 @@ We recommend using a local chain for development purposes. `LocalSecret` is a co
 
 ```bash
 docker run -it -p 9091:9091 -p 26657:26657 -p 1317:1317 -p 5000:5000 \
-  --name localsecret ghcr.io/scrtlabs/localsecret
+  --name localsecret ghcr.io/scrtlabs/localsecret:latest
 ```
 
 You'll need to configure SecretCLI to work with `LocalSecret`
@@ -293,22 +293,23 @@ Next, deploy the secret contract. The script below uploads the compiled `contrac
 If successful, the output should look like this:
 
 ```
+Deploy and instantiate secret contract to local blockchain
               <####> Create Secret Box contract <####>
 secretcli version in the docker image is: v0.0.0
 
-LocalSecret gRPC: https://9091-secretunive-secretcount-2qzt9b9me7a.ws-us77.gitpod.io
+LocalSecret URL: https://1317-secretunive-secretcount-qlse70ev32j.ws-us94.gitpod.io
 
-waiting on tx: D9098C49321A18C7CDAC3AB12F7B1EF7FB61CCC17ABEA527E6E990F4E6A3D965
+waiting on tx: 1E7F9929CDE5B61DB49185F14104886FD86D6EA9B68C7E1F962A52619A3BFBF9
 uploaded contract
 got contract hash
 sending init message: '{"count": 16876}'
-waiting on tx: A74A2695F925A96116E955D7925A92AC8622241A1B6F40BA09A5ADE40D7AF4A6
+waiting on tx: BDD7500F39A2EF52C37FEE0CC7B399F70E89C815335A6CFCF9A9D8742BC9B328
 
 Secret Box created successfully!
 
 secret code id: 1
 secret contract address: secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg
-secret contract code hash: 0x8a28d614a769a8b3f472cca3b379b2694c6b483713b22d2f82a33cf354e7e09e
+secret contract code hash: 0xe4dde964c41da6637e18b044335c6ca8fc5b1562a6bf6aee42a5b0afb9240460
 
 Storing environment variables:
 

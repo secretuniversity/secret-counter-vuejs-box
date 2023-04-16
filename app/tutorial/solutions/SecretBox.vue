@@ -10,12 +10,12 @@ const wallet = new Wallet(
 )
 
 // Get environment variables from .env
-const localSecretUrl = import.meta.env.VITE_LOCALSECRET_GRPC
+const localSecretUrl = import.meta.env.VITE_LOCALSECRET_LCD
 const secretBoxCode = import.meta.env.VITE_SECRET_BOX_CODE
 const secretBoxHash = import.meta.env.VITE_SECRET_BOX_HASH
 const secretBoxAddress = import.meta.env.VITE_SECRET_BOX_ADDRESS
 
-console.log(`local gRPC = ${localSecretUrl}`)
+console.log(`local url = ${localSecretUrl}`)
 console.log(`code id = ${secretBoxCode}`)
 console.log(`contract hash = ${secretBoxHash}`)
 console.log(`contract address = ${secretBoxAddress}`)
@@ -28,9 +28,9 @@ onMounted(async () => {
 
   // To create a signer secret.js client, also pass in a wallet
   console.log("Initializing Secret.js client ...")
-  secretjs = await SecretNetworkClient.create({
-    //grpcWebUrl: "http://localhost:9091",
-    grpcWebUrl: localSecretUrl,
+  secretjs = await new SecretNetworkClient({
+    //url: "http://localhost:1317",
+    url: localSecretUrl,
     chainId: "secretdev-1",
     wallet: wallet,
     walletAddress: wallet.address,
@@ -45,8 +45,8 @@ const queryCounter = async () => {
   type CountResponse = { count: number }
 
   const response = (await secretjs.query.compute.queryContract({
-    contractAddress: secretBoxAddress,
-    codeHash: secretBoxHash,
+    contract_address: secretBoxAddress,
+    code_hash: secretBoxHash,
     query: { get_count: {} },
   })) as CountResponse;
 
@@ -63,8 +63,8 @@ const incrementCounter = async () => {
   const tx = await secretjs.tx.compute.executeContract(
   {
     sender: wallet.address,
-    contractAddress: secretBoxAddress,
-    codeHash: secretBoxHash,
+    contract_address: secretBoxAddress,
+    code_hash: secretBoxHash,
     msg: {
       increment: {},
     },
@@ -81,8 +81,8 @@ const resetCounter = async () => {
   const tx = await secretjs.tx.compute.executeContract(
   {
     sender: wallet.address,
-    contractAddress: secretBoxAddress,
-    codeHash: secretBoxHash,
+    contract_address: secretBoxAddress,
+    code_hash: secretBoxHash,
     msg: {
       reset: { count: 56 },
     },
