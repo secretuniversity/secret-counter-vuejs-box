@@ -765,7 +765,7 @@ Now, let's modify the [SecretBox.vue]() component so that it:
 VITE_SECRET_BOX_CODE=1
 VITE_SECRET_BOX_ADDRESS=secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg
 VITE_SECRET_BOX_HASH=0x000b66731111961d23548cf32aa3a17e4553c635aa9a524057b314b81aadf5a6
-VITE_LOCALSECRET_LCD=http://localhost:1317
+VITE_LOCALSECRET_LCD=https://1317-secretunive-secretcount-x3lscykgc9v.ws-us94.gitpod.io
 ```
 
 ###
@@ -808,7 +808,7 @@ console.log(`contract address = ${secretBoxAddress}`)
 If you open the browser Dev Tools window (Ctrl+Shift+I), you should see the console log messages from above. 
 
 ```bash
-local url = http://localhost:1317
+local url = https://1317-secretunive-secretcount-x3lscykgc9v.ws-us94.gitpod.io
 code id = 1
 contract hash = 0x000b66731111961d23548cf32aa3a17e4553c635aa9a524057b314b81aadf5a6
 contract address = secret18vd8fpwxzck93qlwghaj6arh4p7c5n8978vsyg
