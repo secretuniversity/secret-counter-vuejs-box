@@ -244,7 +244,7 @@ function main() {
     log -e "secret contract code hash: $contract_hash\n"
 
     log 'Storing environment variables:'
-    echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash\nLOCALSECRET_LCD=$localsecret_grpc" > .env
+    echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash\nLOCALSECRET_LCD=$localsecret_lcd" > .env
     echo -e "VITE_SECRET_BOX_CODE=$code_id\nVITE_SECRET_BOX_ADDRESS=$contract_addr\nVITE_SECRET_BOX_HASH=$contract_hash\nVITE_LOCALSECRET_LCD=$localsecret_lcd" > app/.env
     echo -e "SECRET_BOX_CODE=$code_id\nSECRET_BOX_ADDRESS=$contract_addr\nSECRET_BOX_HASH=$contract_hash\nLOCALSECRET_LCD=$localsecret_lcd" > tests/.env
     log "\n==="
