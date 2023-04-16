@@ -141,7 +141,7 @@ reset { "count": 56 } # Or any i32 value
 
 In the `Secret Box Workspace` terminal, you should see the output of the tasks that store and create your contract.
 ###
-![](https://i.imgur.com/BxAJ6an.png)
+![](https://i.imgur.com/bavMGSq.png)
 
 
 > If you've done any object-oriented programming, the idea of instantiating an object from a class definition will be familiar to you.
