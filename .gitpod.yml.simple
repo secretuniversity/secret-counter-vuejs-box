@@ -20,10 +20,10 @@ tasks:
   - name: LocalSecret
     init: |
       echo "Pull LocalSecret docker image"
-      docker pull ghcr.io/scrtlabs/localsecret:v1.6.0
+      docker pull ghcr.io/scrtlabs/localsecret:v1.8.0
     command: |
-      unset LOCALSECRET_GRPC
-      unset VITE_LOCALSECRET_GRPC
+      unset LOCALSECRET_LCD
+      unset VITE_LOCALSECRET_LCD
       echo "LocalSecret environment ready"
     openMode: split-right
 
@@ -43,11 +43,11 @@ tasks:
       echo "Wait for LocalSecret RPC"
       gp ports await 26657
       scripts/localsecret_healthcheck.sh
-      echo "Wait for LocalSecret gRPC-Web"
-      gp ports await 9091
-      unset LOCALSECRET_GRPC
-      unset VITE_LOCALSECRET_GRPC
-      e="LOCALSECRET_GRPC=$(gp url 9091)"
+      echo "Wait for LocalSecret LCD"
+      gp ports await 1317
+      unset LOCALSECRET_LCD
+      unset VITE_LOCALSECRET_LCD
+      e="LOCALSECRET_LCD=$(gp url 1317)"
       eval $(gp env -e $e)
       echo "Ready to build, test, deploy and instantiate secret contract to local blockchain"
     openMode: split-right
@@ -66,16 +66,16 @@ tasks:
       #
       # Need to unset the VITE env vars so that the new values are read when app/.env is updated
       #
-       echo "Wait for LocalSecret gRPC-Web"
-      gp ports await 9091
+       echo "Wait for LocalSecret LCD"
+      gp ports await 1317
       echo "Setup Vite Environment variables"
-      unset LOCALSECRET_GRPC
-      e="LOCALSECRET_GRPC=$(gp url 9091)"
+      unset LOCALSECRET_LCD
+      e="LOCALSECRET_LCD=$(gp url 1317)"
       eval $(gp env -e $e)
       unset VITE_SECRET_BOX_CODE
       unset VITE_SECRET_BOX_ADDRESS
       unset VITE_SECRET_BOX_HASH
-      unset VITE_LOCALSECRET_GRPC
+      unset VITE_LOCALSECRET_LCD
     openMode: split-right
 
 vscode:
