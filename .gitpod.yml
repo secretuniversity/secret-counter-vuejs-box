@@ -32,7 +32,7 @@ tasks:
     init: |
       echo "Setup Rust toolchain for pre-build"
       rustup uninstall stable
-      rustup install stable 
+      rustup install stable
       rustup target add wasm32-unknown-unknown --toolchain stable
       rustup default stable
       echo "Compile secret box contract"
@@ -57,9 +57,9 @@ tasks:
       scripts/localsecret_healthcheck.sh
       echo "Deploy and instantiate secret contract to local blockchain"
       gp ports await 26657
-      echo "Wait for LocalSecret gRPC-Web"
+      echo "Wait for LocalSecret LCD"
       gp ports await 1317
-      unset LOCALSECRET_GRPC
+      unset LOCALSECRET_LCD
       unset VITE_LOCALSECRET_LCD
       e="LOCALSECRET_LCD=$(gp url 1317)"
       eval $(gp env -e $e)
@@ -110,10 +110,6 @@ vscode:
 ports:
   - name: LocalSecret RPC
     port: 26657
-    onOpen: ignore
-    visibility: public
-  - name: LocalSecret gRPC-Web
-    port: 9090-9091
     onOpen: ignore
     visibility: public
   - name: Secret Faucet
