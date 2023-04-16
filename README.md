@@ -4,7 +4,7 @@ _(Brought to you by [Secret University](https://scrt.university))_
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/secretuniversity/secret-counter-vuejs-box)
 
-The Secret Counter Box is a quickstart for dapp development on [Secret Network](https://scrt.network). It consists of a frontend (Vue + Vite + Typescript) and a secret contract (Rust + Secret CosmWasm), based on the [secret counter template](https://github.com/secretuniversity/secret-template-cw1).
+The Secret Counter Box is a quickstart for dapp development on [Secret Network](https://scrt.network). It consists of a frontend (Vue + Vite + Typescript) and a secret contract (Rust + Secret CosmWasm), based on the [secret counter template](https://github.com/secretuniversity/secret-template).
 
 This is a beginner-level box and is for developers new to secret contract development. It illustrates the basics of instantiating a secret contract, and handling queries and transactions that modify state data.
 
