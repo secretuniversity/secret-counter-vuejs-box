@@ -36,10 +36,13 @@ tasks:
       cd $GITPOD_REPO_ROOT
     command: |
       echo "Setup Rust toolchain"
-      rustup uninstall stable
-      rustup install stable
-      rustup target add wasm32-unknown-unknown --toolchain stable
-      rustup default stable
+      #rustup uninstall stable
+      #rustup install stable
+      #rustup target add wasm32-unknown-unknown --toolchain stable
+      #rustup default stable
+      rustup install nightly-2022-02-23
+      rustup target add wasm32-unknown-unknown --toolchain nightly-2022-02-23
+      rustup default nightly-2022-02-23
       echo "Wait for LocalSecret RPC"
       gp ports await 26657
       scripts/localsecret_healthcheck.sh
